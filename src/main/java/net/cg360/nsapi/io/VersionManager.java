@@ -6,6 +6,9 @@ import net.cg360.nsapi.io.versions.MIDUpgraderV2;
 import java.util.HashMap;
 import java.util.Optional;
 
+/**
+ * @author CG360;
+ */
 public final class VersionManager {
 
     private static VersionManager versionManager;

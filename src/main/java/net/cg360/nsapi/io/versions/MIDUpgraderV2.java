@@ -4,6 +4,9 @@ import com.google.gson.JsonElement;
 import net.cg360.nsapi.MapID;
 import net.cg360.nsapi.io.MIDHeader;
 
+/**
+ * @author CG360;
+ */
 public class MIDUpgraderV2 implements MIDUpgraderBase {
 
     @Override

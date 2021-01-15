@@ -23,3 +23,8 @@ dependencies {
     compile fileTree(dir: 'libs/compile', include: '*.jar')
     implementation fileTree(dir: 'libs/runtime', include: '*.jar')
 }
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}

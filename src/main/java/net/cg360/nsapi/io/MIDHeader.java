@@ -1,5 +1,8 @@
 package net.cg360.nsapi.io;
 
+/**
+ * @author CG360;
+ */
 public final class MIDHeader {
 
     private String identifier;

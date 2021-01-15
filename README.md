@@ -33,6 +33,8 @@ _(Compared to the internal 1.1 format and codebase used at Mooncraft Games)_
   - [ A ] Format: Added permanent `map_storage_version` property.
   - [ C ] Any mention of 'Level' is now changed to 'Map' (As it was artifact of the bedrock roots)
   - [ C ] Moved RotatablePosition to Commons Project
+  - [ C ] Moved PointEntity (Stored data) to Commons Project
+  - [ C ] Moved MapRegion (Stored data) to Commons Project
   - [ C ] Format: `id` -> `identifier`
   - [ C ] Format: `mapid_version` -> `format_version`
   - [ X ] Format: Removed the `death_messages` property.

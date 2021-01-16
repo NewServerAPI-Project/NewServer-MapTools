@@ -1,6 +1,30 @@
+# MapID Universal Lib
+![Badge: Java](https://img.shields.io/badge/Java-8-red?style=for-the-badge)
+![Badge: Version](https://img.shields.io/badge/Version-MapID2-orange?style=for-the-badge)
+
+![Dependency: Commons](https://img.shields.io/badge/Depend-NSAPI_Commons:_1.0-blue?style=for-the-badge)
+
+*Also referred to as MapID 2*
+
+### Summary:
+MapID is a json-based format used to provide extra metadata to servers for minigame maps, offering simple properties such as **names**, **descriptions**, **authors**, as well as richer data such as **Point Entities**, **Map Regions** and other custom properties. It is designed to sit in the root directory of any map (However a world/map is chosen to be stored) and be read by the server.
+
+This library, written in **Java 8**, is designed to read these files from any version (From MapID 2 onwards) with backwards compatibility as well as writing them in the latest version of the format. Furthermore, it offers an interface for Minecraft plugins (Or even other games) to access the data stored within the format.
+
+It otherwise does not offer systems that run games with the functionality that a Point Entity, or a Map Region could provide. That is up to the library implementor to provide dynamic functionality. This library is purely for reading and writing these files.
+
+
+### History:
+The original MapID project started back in March 2020 when Mooncraft Games had moved on to a minigame network while Skyblock progress was restricted. The underlying minigame architecture, which was closed-source, was called NGAPI 1.0. It will stay closed-source due to the actual API being very bloated with the majority of its components being located within a single plugin with multiple connections, thus tying features into the mess of spaghetti code.
+
+The MapID format, while still being developed, initially started with an id, name, description, authors, and properties as the only purpose was to offer simple metadata for minigame maps. Soon, however, the MapRegion was introduced with a limited set of functionality which NGAPI 1 was stuck with. A region could have multiple behavior "tags" (similar to PointEntity types) as well as defining the size and if it was active, however, there were no properties. It shortly got followed up with the PointEntity which is close to its current counterpart in MapID 2 as it had a more flexible design. This is why the modern MapRegion closely mimics the current PointEntity.
+
+Furthermore, while MapID 1 was designed to be easily extendable in the future, it did not have any required properties that tracked the version, thus it will **not** be compatible with MapID 2 (If you can somehow obtain a MapID 1)
+
+
+## Technical Details
 
 ### Format:
-
 The MapID format is json-based to make editing by hand more approachable by people familiar with Minecraft's resource packs. Detailed documentation on all the formats from MapID2 onwards can be found on the wiki.
 
 Latest: `//Insert link here when available` (MapID 2)

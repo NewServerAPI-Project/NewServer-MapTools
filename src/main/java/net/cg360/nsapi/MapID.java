@@ -31,7 +31,7 @@ public abstract class MapID {
 
 
     public MapID(MIDHeader header, String displayName, String description, String[] authors, String[] supportedGamemodes, Map<String, PosRot[]> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches) {
-        if(header == null) throw new IllegalArgumentException("MapID is somehow missing a header. This is a plugin bug, please report."); //Whoever triggers this will make me screeeech.
+        if(header == null) throw new IllegalArgumentException("MapID is somehow missing a header. This is a plugin bug, please report with a list of plugins."); //Whoever triggers this will make me screeeech.
         if(spawns == null || spawns.size() == 0) throw new IllegalArgumentException("MapID is missing spawns. A map must have at *least* 1 spawn.");
 
         this.header = header;
@@ -73,16 +73,19 @@ public abstract class MapID {
     public static class Builder extends MapID {
 
         public Builder(MIDHeader header) {
-            super(new MIDHeader());
-
+            super(header, null, null, null, null, new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>());
         }
 
-        protected Builder(MIDHeader) {
-
-        }
 
         public MapID build() {
-            return new AssembledMapID(this.m);
+            Map<String, PosRot[]> spawns = Collections.unmodifiableMap(this.spawns);
+            Map<String, MapRegionDataStore> regions = Collections.unmodifiableMap(this.regions);
+            Map<String, PointEntityDataStore> pointEntities = Collections.unmodifiableMap(this.pointEntities);
+            Map<String, String> strings = Collections.unmodifiableMap(this.strings);
+            Map<String, Number> numbers = Collections.unmodifiableMap(this.numbers);
+            Map<String, Boolean> switches = Collections.unmodifiableMap(this.switches);
+
+            return new AssembledMapID(this.header, this.displayName, this.description, this.authors, this.supportedGamemodes, spawns, regions, pointEntities, strings, numbers, switches);
         }
 
     }

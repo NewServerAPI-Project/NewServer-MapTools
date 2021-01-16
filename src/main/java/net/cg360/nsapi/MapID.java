@@ -1,5 +1,6 @@
 package net.cg360.nsapi;
 
+import com.google.gson.JsonObject;
 import net.cg360.nsapi.commons.Utility;
 import net.cg360.nsapi.commons.data.MapRegionDataStore;
 import net.cg360.nsapi.commons.data.PointEntityDataStore;
@@ -58,6 +59,8 @@ public abstract class MapID {
     public Map<String, String> getStrings() { return strings; }
     public Map<String, Number> getNumbers() { return numbers; }
     public Map<String, Boolean> getSwitches() { return switches; }
+
+    public static Builder builder(MIDHeader header){ return new Builder(header); }
 
 
 

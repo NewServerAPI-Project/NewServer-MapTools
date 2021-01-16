@@ -24,17 +24,22 @@ A few parts of the format don't change between versions (As of MapID 2.0) as the
 ### Changelog (MapID 2):
 _(Compared to the internal 1.1 format and codebase used at Mooncraft Games)_
 
-[ A ] = Addition;
-[ X ] = Removal;
-[ C ] = Change;
+`[ A ]` = Addition;
+`[ X ]` = Removal;
+`[ C ]` = Change;
 
-  - [ A ] New Builder for the MapID object.
-  - [ A ] Format: Added permanent `map_storage_type` property.
-  - [ A ] Format: Added permanent `map_storage_version` property.
-  - [ C ] Any mention of 'Level' is now changed to 'Map' (As it was artifact of the bedrock roots)
-  - [ C ] Moved RotatablePosition to Commons Project
-  - [ C ] Moved PointEntity (Stored data) to Commons Project
-  - [ C ] Moved MapRegion (Stored data) to Commons Project
-  - [ C ] Format: `id` -> `identifier`
-  - [ C ] Format: `mapid_version` -> `format_version`
-  - [ X ] Format: Removed the `death_messages` property.
+  - `[ A ]` New Builder for the MapID object.
+  - `[ A ]` Format: Added permanent `map_storage_type` property.
+  - `[ A ]` Format: Added permanent `map_storage_version` property.
+  - `[ C ]` Any mention of 'Level' is now changed to 'Map' (As it was artifact of the bedrock roots).
+  - `[ C ]` Moved RotatablePosition (now PosRot) to Commons Project.
+  - `[ C ]` Moved PointEntity (Stored data) to Commons Project.
+  - `[ C ]` Moved MapRegion (Stored data) to Commons Project.
+  - `[ C ]` PosRot now centers the Y value (Previously only X + Z) if shouldOffsetCenter is true.
+  - `[ C ]` PointEntities and MapRegions are now more forgiving for missing properties.
+  - `[ C ]` Merged internal `integers` and `floats` lists into `numbers`.
+  - `[ C ]` Format: Any separated `strings`, `integers`, `floats`, and `switches` are now found in one `properties` section.
+  - `[ C ]` Format: MapRegions are now mono-typed - They are structured like the old PointEntity.
+  - `[ C ]` Format: `id` -> `identifier`.
+  - `[ C ]` Format: `mapid_version` -> `format_version`.
+  - `[ X ]` Format: Removed the `death_messages` property.

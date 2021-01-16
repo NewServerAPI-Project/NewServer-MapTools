@@ -15,19 +15,19 @@ import java.util.Map;
  */
 public abstract class MapID {
 
-    private MIDHeader header;
-
-    private String displayName;
-    private String description;
-    private String[] authors;
-    private String[] supportedGamemodes;
-
-    private Map<String, PosRot[]> spawns;
-    private Map<String, MapRegionDataStore> regions;
-    private Map<String, PointEntityDataStore> pointEntities;
-    private Map<String, String> strings;
-    private Map<String, Number> numbers;
-    private Map<String, Boolean> switches;
+    protected MIDHeader header;
+    protected
+    protected String displayName;
+    protected String description;
+    protected String[] authors;
+    protected String[] supportedGamemodes;
+    protected
+    protected Map<String, PosRot[]> spawns;
+    protected Map<String, MapRegionDataStore> regions;
+    protected Map<String, PointEntityDataStore> pointEntities;
+    protected Map<String, String> strings;
+    protected Map<String, Number> numbers;
+    protected Map<String, Boolean> switches;
 
 
     public MapID(MIDHeader header, String displayName, String description, String[] authors, String[] supportedGamemodes, Map<String, PosRot[]> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches) {
@@ -62,22 +62,27 @@ public abstract class MapID {
 
     public static class AssembledMapID extends MapID {
 
+        public AssembledMapID(MIDHeader header, String displayName, String description, String[] authors, String[] supportedGamemodes, Map<String, PosRot[]> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches) {
+            super(header, displayName, description, authors, supportedGamemodes, spawns, regions, pointEntities, strings, numbers, switches);
+        }
+
     }
 
 
 
     public static class Builder extends MapID {
 
-        public Builder(String displayName, String[] supportedGamemodes) {
+        public Builder(MIDHeader header) {
+            super(new MIDHeader());
 
         }
 
-        protected Builder() {
+        protected Builder(MIDHeader) {
 
         }
 
         public MapID build() {
-            return new AssembledMapID();
+            return new AssembledMapID(this.m);
         }
 
     }

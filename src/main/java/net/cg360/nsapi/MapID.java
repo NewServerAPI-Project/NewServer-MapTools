@@ -16,12 +16,12 @@ import java.util.Map;
 public abstract class MapID {
 
     protected MIDHeader header;
-    protected
+
     protected String displayName;
     protected String description;
     protected String[] authors;
     protected String[] supportedGamemodes;
-    protected
+
     protected Map<String, PosRot[]> spawns;
     protected Map<String, MapRegionDataStore> regions;
     protected Map<String, PointEntityDataStore> pointEntities;

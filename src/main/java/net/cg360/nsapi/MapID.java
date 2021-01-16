@@ -88,5 +88,76 @@ public abstract class MapID {
             return new AssembledMapID(this.header, this.displayName, this.description, this.authors, this.supportedGamemodes, spawns, regions, pointEntities, strings, numbers, switches);
         }
 
+
+        public Builder setMapRegions(Map<String, MapRegionDataStore> regions) {
+            this.regions = new HashMap<>();
+
+            for(Map.Entry<String, MapRegionDataStore> e: regions.entrySet()){
+                this.regions.put(e.getKey().trim().toLowerCase(), e.getValue());
+            }
+            return this;
+        }
+
+        public Builder setPointEntities(Map<String, PointEntityDataStore> pointEntities) {
+            this.pointEntities = new HashMap<>();
+
+            for(Map.Entry<String, PointEntityDataStore> e: pointEntities.entrySet()){
+                this.pointEntities.put(e.getKey().trim().toLowerCase(), e.getValue());
+            }
+            return this;
+        }
+
+        public Builder setStrings(Map<String, String> strings) {
+            this.strings = new HashMap<>();
+
+            for(Map.Entry<String, String> e: strings.entrySet()){
+                this.strings.put(e.getKey().trim().toLowerCase(), e.getValue());
+            }
+            return this;
+        }
+
+        public Builder setNumbers(Map<String, Number> floats) {
+            this.numbers = new HashMap<>();
+
+            for(Map.Entry<String, Number> e: floats.entrySet()){
+                this.numbers.put(e.getKey().trim().toLowerCase(), e.getValue());
+            }
+            return this;
+        }
+
+        public Builder setSwitches(Map<String, Boolean> switches) {
+            this.switches = new HashMap<>();
+
+            for(Map.Entry<String, Boolean> e: switches.entrySet()){
+                this.switches.put(e.getKey().trim().toLowerCase(), e.getValue());
+            }
+            return this;
+        }
+
+        public Builder setMapRegion(String entry, MapRegionDataStore value){
+            this.regions.put(entry.trim().toLowerCase(), value);
+            return this;
+        }
+
+        public Builder setPointEntity(String entry, PointEntityDataStore value){
+            this.pointEntities.put(entry.trim().toLowerCase(), value);
+            return this;
+        }
+
+        public Builder setString(String entry, String value){
+            this.strings.put(entry.trim().toLowerCase(), value);
+            return this;
+        }
+
+        public Builder setNumber(String entry, Number value){
+            this.numbers.put(entry.trim().toLowerCase(), value);
+            return this;
+        }
+
+        public Builder setSwitch(String entry, Boolean value){
+            this.switches.put(entry.trim().toLowerCase(), value);
+            return this;
+        }
+
     }
 }

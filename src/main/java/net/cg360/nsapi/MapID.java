@@ -32,12 +32,12 @@ public abstract class MapID {
 
     public MapID(MIDHeader header, String displayName, String description, String[] authors, String[] supportedGamemodes, Map<String, PosRot[]> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches) {
         if(header == null) throw new IllegalArgumentException("MapID is somehow missing a header. This is a plugin bug, please report with a list of plugins."); //Whoever triggers this will make me screeeech.
-        if(spawns == null || spawns.size() == 0) throw new IllegalArgumentException("MapID is missing spawns. A map must have at *least* 1 spawn.");
+        if(spawns == null) throw new IllegalArgumentException("MapID is missing spawns.");
 
         this.header = header;
         this.displayName = displayName == null ? Utility.pickRandomString(MapIDConstants.MAPID_MISSING_NAMES) : displayName;
         this.description = description == null ? Utility.pickRandomString(MapIDConstants.MAPID_MISSING_DESCRIPTIONS) : description;;
-        this.authors = authors == null ? new String[]{"Unknown"} : authors; //Maybe use contributors? Seems like a potentially bad way to deal with it. Opinions?
+        this.authors = authors == null ? new String[]{"Unknown"} : authors; //Maybe use contributors: Seems like they would be a bad way to deal with it. Opinions?
         this.supportedGamemodes = supportedGamemodes == null ? new String[0] : supportedGamemodes;
         this.spawns = spawns;
         this.regions = regions == null ? Collections.unmodifiableMap(new HashMap<>()) : regions;

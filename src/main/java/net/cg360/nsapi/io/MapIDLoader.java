@@ -36,7 +36,7 @@ public final class MapIDLoader {
         versionUpgraders.put(version, upgrader);
     }
 
-    public MapID loadMapID(String mapRootPath) throws FileNotFoundException, IOException {
+    public MapID loadMapID(String mapRootPath) throws IOException {
         String path = mapRootPath.endsWith("/") ? mapRootPath : mapRootPath + "/";
         File mapRootFile = new File(mapRootPath);
 

@@ -3,6 +3,7 @@
 ![Badge: Version](https://img.shields.io/badge/Version-MapID2-orange?style=for-the-badge)
 
 ![Dependency: Commons](https://img.shields.io/badge/Depend-NSAPI_Commons:_1.0-blue?style=for-the-badge)
+![Dependency: Commons](https://img.shields.io/badge/Depend-Gson:_2.8.6-default?style=for-the-badge)
 
 *Also referred to as MapID 2*
 

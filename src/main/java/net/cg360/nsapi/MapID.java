@@ -60,6 +60,7 @@ public abstract class MapID {
     public Map<String, Boolean> getSwitches() { return switches; }
 
 
+
     public static class AssembledMapID extends MapID {
 
         public AssembledMapID(MIDHeader header, String displayName, String description, String[] authors, String[] supportedGamemodes, Map<String, PosRot[]> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches) {
@@ -86,6 +87,33 @@ public abstract class MapID {
             Map<String, Boolean> switches = Collections.unmodifiableMap(this.switches);
 
             return new AssembledMapID(this.header, this.displayName, this.description, this.authors, this.supportedGamemodes, spawns, regions, pointEntities, strings, numbers, switches);
+        }
+
+
+        public MapID setHeader(MIDHeader header) {
+            if(header == null) throw new IllegalArgumentException("Within builder, header cannot be null");
+            this.header = header;
+            return this;
+        }
+
+        public MapID setDisplayName(String displayName) {
+            this.displayName = displayName;
+            return this;
+        }
+
+        public MapID setDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public MapID setAuthors(String[] authors) {
+            this.authors = authors;
+            return this;
+        }
+
+        public MapID setSupportedGamemodes(String[] supportedGamemodes) {
+            this.supportedGamemodes = supportedGamemodes;
+            return this;
         }
 
         public Builder setSpawnslists(Map<String, PosRot[]> spawns) {

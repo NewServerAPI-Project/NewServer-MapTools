@@ -88,6 +88,14 @@ public abstract class MapID {
             return new AssembledMapID(this.header, this.displayName, this.description, this.authors, this.supportedGamemodes, spawns, regions, pointEntities, strings, numbers, switches);
         }
 
+        public Builder setSpawnslists(Map<String, PosRot[]> spawns) {
+            this.spawns = new HashMap<>();
+
+            for(Map.Entry<String, PosRot[]> e: spawns.entrySet()){
+                this.spawns.put(e.getKey().trim().toLowerCase(), e.getValue());
+            }
+            return this;
+        }
 
         public Builder setMapRegions(Map<String, MapRegionDataStore> regions) {
             this.regions = new HashMap<>();
@@ -134,6 +142,11 @@ public abstract class MapID {
             return this;
         }
 
+        public Builder setSpawnlist(String spawnlist, PosRot[] value){
+            this.spawns.put(spawnlist.trim().toLowerCase(), value);
+            return this;
+        }
+
         public Builder setMapRegion(String entry, MapRegionDataStore value){
             this.regions.put(entry.trim().toLowerCase(), value);
             return this;
@@ -156,6 +169,25 @@ public abstract class MapID {
 
         public Builder setSwitch(String entry, Boolean value){
             this.switches.put(entry.trim().toLowerCase(), value);
+            return this;
+        }
+
+        public Builder addSpawn(String spawnlist, PosRot value){
+            String spListID = spawnlist.toLowerCase().trim();
+            PosRot[] spList;
+            if(this.spawns.get(spListID) == null){
+                spList = new PosRot[]{value};
+            } else {
+                PosRot[] oldList = this.spawns.get(spawnlist);
+                int oldLength = oldList.length;
+                spList = new PosRot[oldLength + 1];
+
+                for(int i = 0; i < oldLength; i++){
+                    spList[i] = oldList[i];
+                }
+                spList[oldLength] = value; //Append onto the end after extending the list.
+            }
+            this.spawns.put(spListID, spList);
             return this;
         }
 

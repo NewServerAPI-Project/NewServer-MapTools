@@ -1,6 +1,7 @@
 package net.cg360.nsapi.io.versions;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.cg360.nsapi.MapID;
 import net.cg360.nsapi.io.MIDHeader;
 
@@ -9,6 +10,6 @@ import net.cg360.nsapi.io.MIDHeader;
  */
 public interface MIDUpgraderBase {
 
-    MapID interpretJsonTree(MIDHeader formatProperties, JsonElement jsonDataIn);
+    MapID interpretJsonTree(MIDHeader formatProperties, JsonObject jsonDataIn);
 
 }

@@ -96,28 +96,28 @@ public abstract class MapID {
         }
 
 
-        public MapID setHeader(MIDHeader header) {
+        public Builder setHeader(MIDHeader header) {
             if(header == null) throw new IllegalArgumentException("Within builder, header cannot be null");
             this.header = header;
             return this;
         }
 
-        public MapID setDisplayName(String displayName) {
+        public Builder setDisplayName(String displayName) {
             this.displayName = displayName;
             return this;
         }
 
-        public MapID setDescription(String description) {
+        public Builder setDescription(String description) {
             this.description = description;
             return this;
         }
 
-        public MapID setAuthors(String[] authors) {
+        public Builder setAuthors(String[] authors) {
             this.authors = authors;
             return this;
         }
 
-        public MapID setSupportedGamemodes(String[] supportedGamemodes) {
+        public Builder setSupportedGamemodes(String[] supportedGamemodes) {
             this.supportedGamemodes = supportedGamemodes;
             return this;
         }

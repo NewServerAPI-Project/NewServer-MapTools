@@ -95,6 +95,24 @@ public abstract class MapID {
             return new AssembledMapID(this.header, this.displayName, this.description, this.authors, this.supportedGamemodes, spawns, regions, pointEntities, strings, numbers, switches, this.extraData);
         }
 
+        public Builder addSpawn(String spawnlist, PosRot value){
+            String spListID = spawnlist.toLowerCase().trim();
+            PosRot[] spList;
+            if(this.spawns.get(spListID) == null){
+                spList = new PosRot[]{value};
+            } else {
+                PosRot[] oldList = this.spawns.get(spawnlist);
+                int oldLength = oldList.length;
+                spList = new PosRot[oldLength + 1];
+
+                for(int i = 0; i < oldLength; i++){
+                    spList[i] = oldList[i];
+                }
+                spList[oldLength] = value; //Append onto the end after extending the list.
+            }
+            this.spawns.put(spListID, spList);
+            return this;
+        }
 
         public Builder setHeader(MIDHeader header) {
             if(header == null) throw new IllegalArgumentException("Within builder, header cannot be null");
@@ -210,25 +228,5 @@ public abstract class MapID {
             this.switches.put(entry.trim().toLowerCase(), value);
             return this;
         }
-
-        public Builder addSpawn(String spawnlist, PosRot value){
-            String spListID = spawnlist.toLowerCase().trim();
-            PosRot[] spList;
-            if(this.spawns.get(spListID) == null){
-                spList = new PosRot[]{value};
-            } else {
-                PosRot[] oldList = this.spawns.get(spawnlist);
-                int oldLength = oldList.length;
-                spList = new PosRot[oldLength + 1];
-
-                for(int i = 0; i < oldLength; i++){
-                    spList[i] = oldList[i];
-                }
-                spList[oldLength] = value; //Append onto the end after extending the list.
-            }
-            this.spawns.put(spListID, spList);
-            return this;
-        }
-
     }
 }

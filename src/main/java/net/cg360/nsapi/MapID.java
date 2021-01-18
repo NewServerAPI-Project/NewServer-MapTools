@@ -30,8 +30,10 @@ public abstract class MapID {
     protected Map<String, Number> numbers;
     protected Map<String, Boolean> switches;
 
+    protected JsonObject extraData;
 
-    public MapID(MIDHeader header, String displayName, String description, String[] authors, String[] supportedGamemodes, Map<String, PosRot[]> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches) {
+
+    public MapID(MIDHeader header, String displayName, String description, String[] authors, String[] supportedGamemodes, Map<String, PosRot[]> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches, JsonObject extraData) {
         if(header == null) throw new IllegalArgumentException("MapID is somehow missing a header. This is a plugin bug, please report with a list of plugins."); //Whoever triggers this will make me screeeech.
 
         this.header = header;
@@ -45,6 +47,7 @@ public abstract class MapID {
         this.strings = strings == null ? Collections.unmodifiableMap(new HashMap<>()) : strings;
         this.numbers = numbers == null ? Collections.unmodifiableMap(new HashMap<>()) : numbers;
         this.switches = switches == null ? Collections.unmodifiableMap(new HashMap<>()) : switches;
+        this.extraData = extraData == null ? new JsonObject() : extraData; //Create empty object if not present.
     }
 
     public MIDHeader getHeader() { return header; }
@@ -58,6 +61,7 @@ public abstract class MapID {
     public Map<String, String> getStrings() { return strings; }
     public Map<String, Number> getNumbers() { return numbers; }
     public Map<String, Boolean> getSwitches() { return switches; }
+    public JsonObject getExtraData() { return extraData.deepCopy(); } //This is probably inefficient but I don't have any other solutions.
 
     public static Builder builder(MIDHeader header){ return new Builder(header); }
 
@@ -65,8 +69,8 @@ public abstract class MapID {
 
     public static class AssembledMapID extends MapID {
 
-        public AssembledMapID(MIDHeader header, String displayName, String description, String[] authors, String[] supportedGamemodes, Map<String, PosRot[]> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches) {
-            super(header, displayName, description, authors, supportedGamemodes, spawns, regions, pointEntities, strings, numbers, switches);
+        public AssembledMapID(MIDHeader header, String displayName, String description, String[] authors, String[] supportedGamemodes, Map<String, PosRot[]> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches, JsonObject extraData) {
+            super(header, displayName, description, authors, supportedGamemodes, spawns, regions, pointEntities, strings, numbers, switches, extraData);
         }
 
     }
@@ -76,7 +80,7 @@ public abstract class MapID {
     public static class Builder extends MapID {
 
         public Builder(MIDHeader header) {
-            super(header, null, null, null, null, new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>());
+            super(header, null, null, null, null, new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new JsonObject());
         }
 
 
@@ -88,7 +92,7 @@ public abstract class MapID {
             Map<String, Number> numbers = Collections.unmodifiableMap(this.numbers);
             Map<String, Boolean> switches = Collections.unmodifiableMap(this.switches);
 
-            return new AssembledMapID(this.header, this.displayName, this.description, this.authors, this.supportedGamemodes, spawns, regions, pointEntities, strings, numbers, switches);
+            return new AssembledMapID(this.header, this.displayName, this.description, this.authors, this.supportedGamemodes, spawns, regions, pointEntities, strings, numbers, switches, this.extraData);
         }
 
 
@@ -169,6 +173,11 @@ public abstract class MapID {
             for(Map.Entry<String, Boolean> e: switches.entrySet()){
                 this.switches.put(e.getKey().trim().toLowerCase(), e.getValue());
             }
+            return this;
+        }
+
+        public Builder setExtraData(JsonObject extraData) {
+            this.extraData = extraData;
             return this;
         }
 

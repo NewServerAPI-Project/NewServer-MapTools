@@ -42,7 +42,11 @@ A few parts of the format don't change between versions (As of MapID 2.0) as the
     
     "map": {
         ... This is the main body of the MapID ...
-    }
+    },
+    
+    "extra_data": {
+        ... Where custom stuff goes | Lib offers direct access to the JsonObject ...
+    }    
 }
 ```
 
@@ -56,6 +60,7 @@ _(Compared to the internal 1.1 format and codebase used at Mooncraft Games)_
   - `[ A ]` New Builder for the MapID object.
   - `[ A ]` Format: Added permanent `map_storage_type` property.
   - `[ A ]` Format: Added permanent `map_storage_version` property.
+  - `[ A ]` Format: Added standalone `extra_data` field.
   - `[ C ]` Any mention of 'Level' is now changed to 'Map' (As it was artifact of the bedrock roots).
   - `[ C ]` Moved RotatablePosition (now PosRot) to Commons Project.
   - `[ C ]` Moved PointEntity (Stored data) to Commons Project.

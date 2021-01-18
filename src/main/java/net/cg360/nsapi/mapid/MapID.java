@@ -1,11 +1,10 @@
-package net.cg360.nsapi;
+package net.cg360.nsapi.mapid;
 
 import com.google.gson.JsonObject;
 import net.cg360.nsapi.commons.Utility;
 import net.cg360.nsapi.commons.data.MapRegionDataStore;
 import net.cg360.nsapi.commons.data.PointEntityDataStore;
 import net.cg360.nsapi.commons.math.PosRot;
-import net.cg360.nsapi.io.MIDHeader;
 
 import java.util.Collections;
 import java.util.HashMap;

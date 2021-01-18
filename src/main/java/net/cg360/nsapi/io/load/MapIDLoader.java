@@ -1,15 +1,15 @@
-package net.cg360.nsapi.io;
+package net.cg360.nsapi.io.load;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
-import net.cg360.nsapi.MapID;
-import net.cg360.nsapi.MapIDConstants;
+import net.cg360.nsapi.mapid.MIDHeader;
+import net.cg360.nsapi.mapid.MapID;
+import net.cg360.nsapi.mapid.MapIDConstants;
 import net.cg360.nsapi.commons.exception.UnsupportedFormatException;
-import net.cg360.nsapi.io.versions.MIDUpgraderBase;
-import net.cg360.nsapi.io.versions.MIDUpgraderV2;
+import net.cg360.nsapi.io.upgrade.mapid.MIDUpgraderBase;
+import net.cg360.nsapi.io.upgrade.mapid.MIDUpgraderV2;
 
 import java.io.*;
 import java.util.Arrays;

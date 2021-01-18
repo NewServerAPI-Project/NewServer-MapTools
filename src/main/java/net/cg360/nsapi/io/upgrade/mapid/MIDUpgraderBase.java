@@ -1,9 +1,8 @@
-package net.cg360.nsapi.io.versions;
+package net.cg360.nsapi.io.upgrade.mapid;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.cg360.nsapi.MapID;
-import net.cg360.nsapi.io.MIDHeader;
+import net.cg360.nsapi.mapid.MapID;
+import net.cg360.nsapi.mapid.MIDHeader;
 
 /**
  * @author CG360;

@@ -16,10 +16,14 @@ public class MIDUpgraderV2 implements MIDUpgraderBase {
             JsonElement bodyElement = jsonDataIn.get("map");
             JsonElement extrasElement = jsonDataIn.get("extra"); // Extra data
 
+            MapID.builder(formatProperties);
+
             if(bodyElement instanceof JsonObject){
 
             }
+            if(extrasElement instanceof JsonObject){
 
+            }
         }
         return null;
     }

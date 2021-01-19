@@ -1,0 +1,12 @@
+group 'net.cg360.nsapi'
+version '2.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+dependencies {
+    compile project(':nsmtcommon')
+}
+
+jar {
+    jar.archiveName('NSMapTools-Spigot-' + archiveVersion.get() + '.jar')
+}

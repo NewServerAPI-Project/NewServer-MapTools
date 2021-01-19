@@ -3,6 +3,8 @@ version '2.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
-jar {
-    jar.archiveName('NSMapTools-Common-' + archiveVersion.get() + '.jar')
+afterEvaluate {
+    jar {
+        jar.archiveName('NSMapTools-Common-' + archiveVersion.get() + '.jar')
+    }
 }

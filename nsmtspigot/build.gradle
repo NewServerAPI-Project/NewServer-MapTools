@@ -7,6 +7,8 @@ dependencies {
     compile project(':nsmtcommon')
 }
 
-jar {
-    jar.archiveName('NSMapTools-Spigot-' + archiveVersion.get() + '.jar')
+afterEvaluate {
+    jar {
+        jar.archiveName('NSMapTools-Spigot-' + archiveVersion.get() + '.jar')
+    }
 }

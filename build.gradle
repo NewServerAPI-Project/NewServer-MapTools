@@ -2,12 +2,16 @@ plugins {
     id 'java'
 }
 
-group 'net.cg360.nsapi'
-version '2.0-SNAPSHOT'
+task copyJars(type: Copy) {
+    from subprojects.collect { it.tasks.withType(Jar) }
+    into "$buildDir/libs"
+}
 
-sourceCompatibility = 1.8
+jar {
+    jar.enabled(false) // Because I'm too monkeybrain to remove the random root jar (empty too ffs), disable it instead pog.
+}
 
-allprojects {
+subprojects {
     apply plugin: 'java'
 
     repositories {
@@ -27,10 +31,5 @@ allprojects {
         from {
             configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
         }
-    }
-
-    java {
-        withSourcesJar()
-        withJavadocJar()
     }
 }

@@ -44,6 +44,8 @@ public class MIDUpgraderV2 implements MIDUpgraderBase {
             JsonElement eRegions = body.get(KEY_REGIONS);
             JsonElement ePointEs = body.get(KEY_POINT_ENTITIES);
             JsonElement eProp = body.get(KEY_PROPERTIES);
+
+
         }
 
         if(extrasElement instanceof JsonObject){

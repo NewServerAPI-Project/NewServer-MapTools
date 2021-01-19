@@ -1,3 +1,3 @@
 rootProject.name = 'NewServerMapTools'
-include 'nsmtcommon', 'nsmtspigot'
+include 'nsmtcommon', 'spigot'
 

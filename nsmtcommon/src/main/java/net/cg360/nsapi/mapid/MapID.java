@@ -31,8 +31,16 @@ public abstract class MapID {
 
     protected JsonObject extraData;
 
-
     public MapID(MIDHeader header, String displayName, String description, String[] authors, String[] supportedGamemodes, Map<String, PosRot[]> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches, JsonObject extraData) {
+        this(header, true, displayName, description, authors, supportedGamemodes, spawns, regions, pointEntities, strings, numbers, switches, extraData);
+        // Public facing method is always unmodifiable.
+    }
+
+    /**
+     * Same as public constructor with an extra parameter for use in the constructor.
+     * @param u is the MapID unmodifiable? Used for constructor.
+     */
+    protected MapID(MIDHeader header, boolean u, String displayName, String description, String[] authors, String[] supportedGamemodes, Map<String, PosRot[]> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches, JsonObject extraData) {
         if(header == null) throw new IllegalArgumentException("MapID is somehow missing a header. This is a plugin bug, please report with a list of plugins."); //Whoever triggers this will make me screeeech.
 
         this.header = header;

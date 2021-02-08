@@ -6,9 +6,7 @@ import net.cg360.nsapi.commons.data.MapRegionDataStore;
 import net.cg360.nsapi.commons.data.PointEntityDataStore;
 import net.cg360.nsapi.commons.math.PosRot;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author CG360;
@@ -43,17 +41,19 @@ public abstract class MapID {
     protected MapID(MIDHeader header, boolean u, String displayName, String description, List<String> authors, List<String> supportedGamemodes, Map<String, PosRot[]> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches, JsonObject extraData) {
         if(header == null) throw new IllegalArgumentException("MapID is somehow missing a header. This is a plugin bug, please report with a list of plugins."); //Whoever triggers this will make me screeeech.
 
+        // NOTICE: All maps + lists in constructor should be encapsulated in umap or ulist.
+
         this.header = header;
         this.displayName = displayName == null ? Utility.pickRandomString(MapIDConstants.MAPID_MISSING_NAMES) : displayName;
         this.description = description == null ? Utility.pickRandomString(MapIDConstants.MAPID_MISSING_DESCRIPTIONS) : description;;
-        this.authors = authors == null ? new String[]{"Unknown"} : authors; //Maybe use contributors: Seems like they would be a bad way to deal with it. Opinions?
-        this.supportedGamemodes = supportedGamemodes == null ? new String[0] : supportedGamemodes;
-        this.spawns = spawns == null ? Collections.unmodifiableMap(new HashMap<>()) : spawns;
-        this.regions = regions == null ? Collections.unmodifiableMap(new HashMap<>()) : regions;
-        this.pointEntities = pointEntities == null ? Collections.unmodifiableMap(new HashMap<>()) : pointEntities;
-        this.strings = strings == null ? Collections.unmodifiableMap(new HashMap<>()) : strings;
-        this.numbers = numbers == null ? Collections.unmodifiableMap(new HashMap<>()) : numbers;
-        this.switches = switches == null ? Collections.unmodifiableMap(new HashMap<>()) : switches;
+        this.authors = authors == null ? new ArrayList<>(Collections.singletonList("None")) : authors; //Maybe use contributors: Seems like they would be a bad way to deal with it. Opinions?
+        this.supportedGamemodes = supportedGamemodes == null ? new ArrayList<>() : supportedGamemodes;
+        this.spawns = spawns == null ? new HashMap<>() : spawns;
+        this.regions = regions == null ? new HashMap<>() : regions;
+        this.pointEntities = pointEntities == null ? new HashMap<>() : pointEntities;
+        this.strings = strings == null ? new HashMap<>() : strings;
+        this.numbers = numbers == null ? new HashMap<>() : numbers;
+        this.switches = switches == null ? new HashMap<>() : switches;
         this.extraData = extraData == null ? new JsonObject() : extraData.deepCopy(); //Create empty object if not present.
     }
 
@@ -75,7 +75,7 @@ public abstract class MapID {
         return isUnmodifiable ? Collections.unmodifiableMap(obj) : obj;
         // Used in constructor. Shortened way of checking if the mapid is unmodifiable, setting the maps to the appropriate type.
     }
-    public static <V> List<?> uList(List<V> obj, boolean isUnmodifiable){
+    public static <V> List<V> uList(List<V> obj, boolean isUnmodifiable){
         return isUnmodifiable ? Collections.unmodifiableList(obj) : obj;
         // Used in constructor. Shortened way of checking if the mapid is unmodifiable, setting the lists to the appropriate type.
     }

@@ -63,7 +63,14 @@ public abstract class MapID {
     public JsonObject getExtraData() { return extraData.deepCopy(); } //This is probably inefficient but I don't have any other solutions.
 
     public static Builder builder(MIDHeader header){ return new Builder(header); }
-
+    public static <K, V> Map<K, V> uMap(Map<K, V> obj, boolean isUnmodifiable){
+        return isUnmodifiable ? Collections.unmodifiableMap(obj) : obj;
+        // Used in constructor. Shortened way of checking if the mapid is unmodifiable, setting the maps to the appropriate type.
+    }
+    public static <V> List<?> uList(List<V> obj, boolean isUnmodifiable){
+        return isUnmodifiable ? Collections.unmodifiableList(obj) : obj;
+        // Used in constructor. Shortened way of checking if the mapid is unmodifiable, setting the lists to the appropriate type.
+    }
 
 
     protected static class AssembledMapID extends MapID {

@@ -59,6 +59,8 @@ A few parts of the format don't change between versions (As of MapID 2.0) as the
     "map_storage_type": "schem",
     "map_storage_version": 1,
     
+    "case_sensitive_ids": true,
+    
     "map": {
         ... This is the main body of the MapID ...
     },
@@ -77,8 +79,9 @@ _(Compared to the internal 1.1 format and codebase used at Mooncraft Games)_
 `[ C ]` = Change;
 
   - `[ A ]` New Builder for the MapID object.
-  - `[ A ]` Format: Added permanent `map_storage_type` property.
-  - `[ A ]` Format: Added permanent `map_storage_version` property.
+  - `[ A ]` Format: Added permanent `map_storage_type` header property.
+  - `[ A ]` Format: Added permanent `map_storage_version` header property.
+  - `[ A ]` Format: Added permanent `case_sensitive_ids` header property. (Default: false)
   - `[ A ]` Format: Added standalone `extra_data` field.
   - `[ C ]` Any mention of 'Level' is now changed to 'Map' (As it was artifact of the bedrock roots).
   - `[ C ]` Moved RotatablePosition (now PosRot) to Commons Project.

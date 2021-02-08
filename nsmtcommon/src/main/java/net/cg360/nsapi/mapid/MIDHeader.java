@@ -18,8 +18,15 @@ public final class MIDHeader {
     private Integer formatVersion;
     private String mapStorageType;
     private String mapStorageVersion;
+    private Boolean hasCaseSensitiveIDs;
 
+    // Code-Generated headers have case-sensitivity forced on.
+    // I don't think it's worth checking every ID in every builder, thus it's easier just to assume it's case-sensitive.
     public MIDHeader(String mapPath, String identifier, Integer formatVersion, String mapStorageType, String mapStorageVersion) {
+        this(mapPath, identifier, formatVersion, mapStorageType, mapStorageVersion, true);
+    }
+
+    protected MIDHeader(String mapPath, String identifier, Integer formatVersion, String mapStorageType, String mapStorageVersion, Boolean hasCaseSensitiveIDs) {
         if(formatVersion == null) throw new IllegalArgumentException("MapID is missing a 'format_version' property.");
 
         this.mapPath = mapPath;
@@ -27,12 +34,14 @@ public final class MIDHeader {
         this.formatVersion = formatVersion;
         this.mapStorageType = mapStorageType == null ? "null" : mapStorageType.trim().toLowerCase();
         this.mapStorageVersion = mapStorageVersion == null ? "null" : mapStorageVersion.trim().toLowerCase();
+        this.hasCaseSensitiveIDs = hasCaseSensitiveIDs != null && hasCaseSensitiveIDs; // Header is exempt, default is false.
     }
 
     public static MIDHeader getHeaderFromJson(JsonObject root) { return getHeaderFromJson(root, null); }
     public static MIDHeader getHeaderFromJson(JsonObject root, String mapPath) {
         Integer formatV = null;
         String id = null, mapStorage = null, mapStorageV = null;
+        Boolean caseSensitiveIDs = null;
 
         JsonElement formatElement = root.get("format_version");
         if(formatElement instanceof JsonPrimitive){
@@ -59,7 +68,13 @@ public final class MIDHeader {
             mapStorageV = p.getAsString();
         }
 
-        return new MIDHeader(mapPath, id, formatV, mapStorage, mapStorageV);
+        JsonElement caseSensitiveIDElement = root.get("case_sensitive_ids");
+        if(caseSensitiveIDElement instanceof JsonPrimitive){
+            JsonPrimitive p = (JsonPrimitive) caseSensitiveIDElement;
+            if(p.isBoolean() || p.isString()) caseSensitiveIDs = p.getAsBoolean();
+        }
+
+        return new MIDHeader(mapPath, id, formatV, mapStorage, mapStorageV, caseSensitiveIDs);
     }
 
     public Optional<String> getMapPath() { return Optional.ofNullable(mapPath); }
@@ -67,4 +82,6 @@ public final class MIDHeader {
     public Integer getFormatVersion() { return formatVersion; }
     public String getMapStorageType() { return mapStorageType; }
     public String getMapStorageVersion() { return mapStorageVersion; }
+    public Boolean hasCaseSensitiveIDs() { return hasCaseSensitiveIDs; }
+
 }

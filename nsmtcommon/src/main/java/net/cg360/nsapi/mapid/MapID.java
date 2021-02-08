@@ -46,14 +46,14 @@ public abstract class MapID {
         this.header = header;
         this.displayName = displayName == null ? Utility.pickRandomString(MapIDConstants.MAPID_MISSING_NAMES) : displayName;
         this.description = description == null ? Utility.pickRandomString(MapIDConstants.MAPID_MISSING_DESCRIPTIONS) : description;;
-        this.authors = authors == null ? new ArrayList<>(Collections.singletonList("None")) : authors; //Maybe use contributors: Seems like they would be a bad way to deal with it. Opinions?
-        this.supportedGamemodes = supportedGamemodes == null ? new ArrayList<>() : supportedGamemodes;
-        this.spawns = spawns == null ? new HashMap<>() : spawns;
-        this.regions = regions == null ? new HashMap<>() : regions;
-        this.pointEntities = pointEntities == null ? new HashMap<>() : pointEntities;
-        this.strings = strings == null ? new HashMap<>() : strings;
-        this.numbers = numbers == null ? new HashMap<>() : numbers;
-        this.switches = switches == null ? new HashMap<>() : switches;
+        this.authors = uList(authors == null ? new ArrayList<>(Collections.singletonList("None")) : authors, u); //Maybe use contributors: Seems like they would be a bad way to deal with it. Opinions?
+        this.supportedGamemodes = uList(supportedGamemodes == null ? new ArrayList<>() : supportedGamemodes, u);
+        this.spawns = uMap(spawns == null ? new HashMap<>() : spawns, u);
+        this.regions = uMap(regions == null ? new HashMap<>() : regions, u);
+        this.pointEntities = uMap(pointEntities == null ? new HashMap<>() : pointEntities, u);
+        this.strings = uMap(strings == null ? new HashMap<>() : strings, u);
+        this.numbers = uMap(numbers == null ? new HashMap<>() : numbers, u);
+        this.switches = uMap(switches == null ? new HashMap<>() : switches, u);
         this.extraData = extraData == null ? new JsonObject() : extraData.deepCopy(); //Create empty object if not present.
     }
 

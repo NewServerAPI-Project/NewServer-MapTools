@@ -1,6 +1,7 @@
 package net.cg360.nsapi.mapid;
 
 import com.google.gson.JsonObject;
+import net.cg360.nsapi.Immutable;
 import net.cg360.nsapi.commons.Utility;
 import net.cg360.nsapi.commons.data.MapRegionDataStore;
 import net.cg360.nsapi.commons.data.PointEntityDataStore;
@@ -42,26 +43,27 @@ public abstract class MapID {
         if(header == null) throw new IllegalArgumentException("MapID is somehow missing a header. This is a plugin bug, please report with a list of plugins."); //Whoever triggers this will make me screeeech.
 
         // NOTICE: All maps + lists in constructor should be encapsulated in umap or ulist.
+        // uMaps + Ulists are used to shorten making them immutable.
 
         this.header = header;
         this.displayName = displayName == null ? Utility.pickRandomString(MapIDConstants.MAPID_MISSING_NAMES) : displayName;
         this.description = description == null ? Utility.pickRandomString(MapIDConstants.MAPID_MISSING_DESCRIPTIONS) : description;;
-        this.authors = uList(authors == null ? new ArrayList<>(Collections.singletonList("None")) : authors, u); //Maybe use contributors: Seems like they would be a bad way to deal with it. Opinions?
-        this.supportedGamemodes = uList(supportedGamemodes == null ? new ArrayList<>() : supportedGamemodes, u);
+        this.authors = Immutable.uList(authors == null ? new ArrayList<>(Collections.singletonList("None")) : authors, u); //Maybe use contributors: Seems like they would be a bad way to deal with it. Opinions?
+        this.supportedGamemodes = Immutable.uList(supportedGamemodes == null ? new ArrayList<>() : supportedGamemodes, u);
 
         if(spawns == null){
-            this.spawns = uMap(new HashMap<>(), u);
+            this.spawns = Immutable.uMap(new HashMap<>(), u);
         } else {
             HashMap<String, List<PosRot>> spawnlists = new HashMap<>();
             // For each list, make it unmodifiable if u = true
-            for(Map.Entry<String, List<PosRot>> i : spawns.entrySet()) spawnlists.put(i.getKey(), uList(i.getValue(), u));
-            this.spawns = uMap(spawnlists, u);
+            for(Map.Entry<String, List<PosRot>> i : spawns.entrySet()) spawnlists.put(i.getKey(), Immutable.uList(i.getValue(), u));
+            this.spawns = Immutable.uMap(spawnlists, u);
         }
-        this.regions = uMap(regions == null ? new HashMap<>() : regions, u);
-        this.pointEntities = uMap(pointEntities == null ? new HashMap<>() : pointEntities, u);
-        this.strings = uMap(strings == null ? new HashMap<>() : strings, u);
-        this.numbers = uMap(numbers == null ? new HashMap<>() : numbers, u);
-        this.switches = uMap(switches == null ? new HashMap<>() : switches, u);
+        this.regions = Immutable.uMap(regions == null ? new HashMap<>() : regions, u);
+        this.pointEntities = Immutable.uMap(pointEntities == null ? new HashMap<>() : pointEntities, u);
+        this.strings = Immutable.uMap(strings == null ? new HashMap<>() : strings, u);
+        this.numbers = Immutable.uMap(numbers == null ? new HashMap<>() : numbers, u);
+        this.switches = Immutable.uMap(switches == null ? new HashMap<>() : switches, u);
         this.extraData = extraData == null ? new JsonObject() : extraData.deepCopy(); //Create empty object if not present.
     }
 
@@ -79,14 +81,6 @@ public abstract class MapID {
     public JsonObject getExtraData() { return extraData.deepCopy(); } //This is probably inefficient but I don't have any other solutions.
 
     public static Builder builder(MIDHeader header){ return new Builder(header); }
-    public static <K, V> Map<K, V> uMap(Map<K, V> obj, boolean isUnmodifiable){
-        return isUnmodifiable ? Collections.unmodifiableMap(obj) : obj;
-        // Used in constructor. Shortened way of checking if the mapid is unmodifiable, setting the maps to the appropriate type.
-    }
-    public static <V> List<V> uList(List<V> obj, boolean isUnmodifiable){
-        return isUnmodifiable ? Collections.unmodifiableList(obj) : obj;
-        // Used in constructor. Shortened way of checking if the mapid is unmodifiable, setting the lists to the appropriate type.
-    }
 
 
     protected static class AssembledMapID extends MapID {

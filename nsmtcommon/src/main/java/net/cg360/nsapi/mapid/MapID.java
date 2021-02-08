@@ -46,7 +46,7 @@ public abstract class MapID {
         this.strings = strings == null ? Collections.unmodifiableMap(new HashMap<>()) : strings;
         this.numbers = numbers == null ? Collections.unmodifiableMap(new HashMap<>()) : numbers;
         this.switches = switches == null ? Collections.unmodifiableMap(new HashMap<>()) : switches;
-        this.extraData = extraData == null ? new JsonObject() : extraData; //Create empty object if not present.
+        this.extraData = extraData == null ? new JsonObject() : extraData.deepCopy(); //Create empty object if not present.
     }
 
     public MIDHeader getHeader() { return header; }

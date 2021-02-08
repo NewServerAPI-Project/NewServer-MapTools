@@ -128,6 +128,16 @@ public abstract class MapID {
             return this;
         }
 
+        public Builder addAuthor(String author){
+            authors.add(author);
+            return this;
+        }
+
+        public Builder addSupportedGamemode(String gamemode){
+            supportedGamemodes.add(gamemode);
+            return this;
+        }
+
         public Builder setHeader(MIDHeader header) {
             if(header == null) throw new IllegalArgumentException("Within builder, header cannot be null");
             this.header = header;

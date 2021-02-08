@@ -1,14 +1,27 @@
 package net.cg360.nsapi.io.upgrade.mapid;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import net.cg360.nsapi.commons.math.PosRot;
 import net.cg360.nsapi.mapid.MapID;
 import net.cg360.nsapi.mapid.MIDHeader;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * @author CG360;
  */
 public class MIDUpgraderV2 implements MIDUpgraderBase {
+
+    // UPDATE NOTES:
+    // Here's a list of considerations to make every time this is modified for
+    // compatibility with a new version.
+    //
+    // - Use old PosRot parsing (Move it into here)
+
 
     public static final String KEY_IDDATA = "map";
     public static final String KEY_EXTRADATA = "extra";
@@ -26,7 +39,7 @@ public class MIDUpgraderV2 implements MIDUpgraderBase {
 
     @Override
     public MapID interpretJsonTree(MIDHeader formatProperties, JsonObject jsonDataIn) {
-        if(jsonDataIn == null) throw new IllegalArgumentException("Missing Json data in upgrader");
+        if(jsonDataIn == null) throw new IllegalArgumentException("Missing Json data in upgrader. Data cannot be null.");
 
         JsonElement bodyElement = jsonDataIn.get(KEY_IDDATA);
         JsonElement extrasElement = jsonDataIn.get(KEY_EXTRADATA); // Extra data
@@ -45,11 +58,82 @@ public class MIDUpgraderV2 implements MIDUpgraderBase {
             JsonElement ePointEs = body.get(KEY_POINT_ENTITIES);
             JsonElement eProp = body.get(KEY_PROPERTIES);
 
+            if(eName instanceof JsonPrimitive) {
+                JsonPrimitive prim = (JsonPrimitive) eName;
+                builder.setDisplayName(prim.getAsString());
+            }
+
+            if(eDesc instanceof JsonPrimitive) {
+                JsonPrimitive prim = (JsonPrimitive) eDesc;
+                builder.setDescription(prim.getAsString());
+            }
+
+
+            // Authors + Gamemodes are added on one by one.
+
+            if(eAuthor instanceof JsonPrimitive) {
+                JsonPrimitive prim = (JsonPrimitive) eAuthor;
+                builder.addAuthor(prim.getAsString());
+            }
+
+            if(eAuthorList instanceof JsonArray) {
+                JsonArray array = (JsonArray) eAuthorList;
+
+                for(JsonElement i: array){
+
+                    if(i instanceof JsonPrimitive){
+                        JsonPrimitive prim = (JsonPrimitive) i;
+                        builder.addAuthor(prim.getAsString());
+                    }
+                }
+            }
+
+            if(eGamemodes instanceof JsonArray) {
+                JsonArray array = (JsonArray) eGamemodes;
+
+                for(JsonElement i: array){
+
+                    if(i instanceof JsonPrimitive){
+                        JsonPrimitive prim = (JsonPrimitive) i; // \/ Do case-sensitive check for ids \/
+                        String id = formatProperties.hasCaseSensitiveIDs() ? prim.getAsString().trim() : prim.getAsString().trim().toLowerCase();
+                        builder.addSupportedGamemode(id);
+                    }
+                }
+            }
+
+            if(eSpawnlist instanceof JsonObject){
+                JsonObject spawnlistObject = (JsonObject) eSpawnlist;
+
+                for(Map.Entry<String, JsonElement> pairs: spawnlistObject.entrySet()){
+                    String spawnlistID = formatProperties.hasCaseSensitiveIDs() ? pairs.getKey().trim() : pairs.getKey().trim().toLowerCase();
+
+                    if(pairs.getValue() instanceof JsonArray){
+                        JsonArray spawnArray = (JsonArray) pairs.getValue();
+                        for(JsonElement arrayChildElement: spawnArray){
+
+                            if(arrayChildElement instanceof JsonObject){
+                                JsonObject positionObject = (JsonObject) arrayChildElement;
+                                PosRot parsedPosition = PosRot.parseFromJson(positionObject); // Use utility parser.
+                                builder.addSpawn(spawnlistID, parsedPosition);
+                            }
+                        }
+
+                    } else if (pairs.getValue() instanceof JsonObject){
+                        JsonObject positionObject = (JsonObject) pairs.getValue();
+                        PosRot parsedPosition = PosRot.parseFromJson(positionObject); // Use utility parser. This could be an issue in future versions
+                        builder.addSpawn(spawnlistID, parsedPosition);
+                    }
+
+
+                }
+            }
+
+
 
         }
 
         if(extrasElement instanceof JsonObject){
-            builder.setExtraData((JsonObject) extrasElement);
+            builder.setExtraData((JsonObject) extrasElement); // Just chuck the extra data in as a JsonObject. It should deepcopy it.
         }
 
         return builder.build();

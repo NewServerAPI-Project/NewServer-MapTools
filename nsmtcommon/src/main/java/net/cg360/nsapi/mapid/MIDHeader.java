@@ -34,7 +34,7 @@ public final class MIDHeader {
         this.formatVersion = formatVersion;
         this.mapStorageType = mapStorageType == null ? "null" : mapStorageType.trim().toLowerCase();
         this.mapStorageVersion = mapStorageVersion == null ? "null" : mapStorageVersion.trim().toLowerCase();
-        this.hasCaseSensitiveIDs = hasCaseSensitiveIDs != null && hasCaseSensitiveIDs; // Header is exempt, default is false.
+        this.hasCaseSensitiveIDs = hasCaseSensitiveIDs != null && hasCaseSensitiveIDs; // Header is forced false, default is false.
     }
 
     public static MIDHeader getHeaderFromJson(JsonObject root) { return getHeaderFromJson(root, null); }

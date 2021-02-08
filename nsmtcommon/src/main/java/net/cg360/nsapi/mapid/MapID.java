@@ -19,8 +19,8 @@ public abstract class MapID {
 
     protected String displayName;
     protected String description;
-    protected String[] authors;
-    protected String[] supportedGamemodes;
+    protected List<String> authors;
+    protected List<String> supportedGamemodes;
 
     protected Map<String, PosRot[]> spawns;
     protected Map<String, MapRegionDataStore> regions;
@@ -31,7 +31,7 @@ public abstract class MapID {
 
     protected JsonObject extraData;
 
-    public MapID(MIDHeader header, String displayName, String description, String[] authors, String[] supportedGamemodes, Map<String, PosRot[]> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches, JsonObject extraData) {
+    public MapID(MIDHeader header, String displayName, String description, List<String> authors, List<String> supportedGamemodes, Map<String, PosRot[]> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches, JsonObject extraData) {
         this(header, true, displayName, description, authors, supportedGamemodes, spawns, regions, pointEntities, strings, numbers, switches, extraData);
         // Public facing method is always unmodifiable.
     }
@@ -40,7 +40,7 @@ public abstract class MapID {
      * Same as public constructor with an extra parameter for use in the constructor.
      * @param u is the MapID unmodifiable? Used for constructor.
      */
-    protected MapID(MIDHeader header, boolean u, String displayName, String description, String[] authors, String[] supportedGamemodes, Map<String, PosRot[]> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches, JsonObject extraData) {
+    protected MapID(MIDHeader header, boolean u, String displayName, String description, List<String> authors, List<String> supportedGamemodes, Map<String, PosRot[]> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches, JsonObject extraData) {
         if(header == null) throw new IllegalArgumentException("MapID is somehow missing a header. This is a plugin bug, please report with a list of plugins."); //Whoever triggers this will make me screeeech.
 
         this.header = header;
@@ -60,8 +60,8 @@ public abstract class MapID {
     public MIDHeader getHeader() { return header; }
     public String getDisplayName() { return displayName; }
     public String getDescription() { return description; }
-    public String[] getAuthors() { return authors; }
-    public String[] getSupportedGamemodes() { return supportedGamemodes; }
+    public List<String> getAuthors() { return authors; }
+    public List<String> getSupportedGamemodes() { return supportedGamemodes; }
     public Map<String, PosRot[]> getSpawns() { return spawns; }
     public Map<String, MapRegionDataStore> getRegions() { return regions; }
     public Map<String, PointEntityDataStore> getPointEntities() { return pointEntities; }
@@ -83,7 +83,7 @@ public abstract class MapID {
 
     protected static class AssembledMapID extends MapID {
 
-        public AssembledMapID(MIDHeader header, String displayName, String description, String[] authors, String[] supportedGamemodes, Map<String, PosRot[]> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches, JsonObject extraData) {
+        public AssembledMapID(MIDHeader header, String displayName, String description, List<String> authors, List<String> supportedGamemodes, Map<String, PosRot[]> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches, JsonObject extraData) {
             super(header, displayName, description, authors, supportedGamemodes, spawns, regions, pointEntities, strings, numbers, switches, extraData);
         }
 
@@ -94,7 +94,7 @@ public abstract class MapID {
     public static class Builder extends MapID {
 
         public Builder(MIDHeader header) {
-            super(header, null, null, null, null, new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new JsonObject());
+            super(header, false,null, null, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new JsonObject());
         }
 
 
@@ -145,12 +145,22 @@ public abstract class MapID {
         }
 
         public Builder setAuthors(String[] authors) {
-            this.authors = authors;
+            this.authors = new ArrayList<>(Arrays.asList(authors));
             return this;
         }
 
         public Builder setSupportedGamemodes(String[] supportedGamemodes) {
-            this.supportedGamemodes = supportedGamemodes;
+            this.supportedGamemodes = new ArrayList<>(Arrays.asList(supportedGamemodes));
+            return this;
+        }
+
+        public Builder setAuthorsList(List<String> authors) {
+            this.authors = new ArrayList<>(authors);
+            return this;
+        }
+
+        public Builder setSupportedGamemodesList(List<String> supportedGamemodes) {
+            this.supportedGamemodes = new ArrayList<>(supportedGamemodes);
             return this;
         }
 

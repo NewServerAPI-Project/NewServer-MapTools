@@ -20,7 +20,7 @@ public abstract class MapID {
     protected List<String> authors;
     protected List<String> supportedGamemodes;
 
-    protected Map<String, PosRot[]> spawns;
+    protected Map<String, List<PosRot>> spawns;
     protected Map<String, MapRegionDataStore> regions;
     protected Map<String, PointEntityDataStore> pointEntities;
     protected Map<String, String> strings;
@@ -29,7 +29,7 @@ public abstract class MapID {
 
     protected JsonObject extraData;
 
-    public MapID(MIDHeader header, String displayName, String description, List<String> authors, List<String> supportedGamemodes, Map<String, PosRot[]> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches, JsonObject extraData) {
+    public MapID(MIDHeader header, String displayName, String description, List<String> authors, List<String> supportedGamemodes, Map<String, List<PosRot>> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches, JsonObject extraData) {
         this(header, true, displayName, description, authors, supportedGamemodes, spawns, regions, pointEntities, strings, numbers, switches, extraData);
         // Public facing method is always unmodifiable.
     }
@@ -38,7 +38,7 @@ public abstract class MapID {
      * Same as public constructor with an extra parameter for use in the constructor.
      * @param u is the MapID unmodifiable? Used for constructor.
      */
-    protected MapID(MIDHeader header, boolean u, String displayName, String description, List<String> authors, List<String> supportedGamemodes, Map<String, PosRot[]> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches, JsonObject extraData) {
+    protected MapID(MIDHeader header, boolean u, String displayName, String description, List<String> authors, List<String> supportedGamemodes, Map<String, List<PosRot>> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches, JsonObject extraData) {
         if(header == null) throw new IllegalArgumentException("MapID is somehow missing a header. This is a plugin bug, please report with a list of plugins."); //Whoever triggers this will make me screeeech.
 
         // NOTICE: All maps + lists in constructor should be encapsulated in umap or ulist.
@@ -48,7 +48,15 @@ public abstract class MapID {
         this.description = description == null ? Utility.pickRandomString(MapIDConstants.MAPID_MISSING_DESCRIPTIONS) : description;;
         this.authors = uList(authors == null ? new ArrayList<>(Collections.singletonList("None")) : authors, u); //Maybe use contributors: Seems like they would be a bad way to deal with it. Opinions?
         this.supportedGamemodes = uList(supportedGamemodes == null ? new ArrayList<>() : supportedGamemodes, u);
-        this.spawns = uMap(spawns == null ? new HashMap<>() : spawns, u);
+
+        if(spawns == null){
+            this.spawns = uMap(new HashMap<>(), u);
+        } else {
+            HashMap<String, List<PosRot>> spawnlists = new HashMap<>();
+            // For each list, make it unmodifiable if u = true
+            for(Map.Entry<String, List<PosRot>> i : spawns.entrySet()) spawnlists.put(i.getKey(), uList(i.getValue(), u));
+            this.spawns = uMap(spawnlists, u);
+        }
         this.regions = uMap(regions == null ? new HashMap<>() : regions, u);
         this.pointEntities = uMap(pointEntities == null ? new HashMap<>() : pointEntities, u);
         this.strings = uMap(strings == null ? new HashMap<>() : strings, u);
@@ -62,7 +70,7 @@ public abstract class MapID {
     public String getDescription() { return description; }
     public List<String> getAuthors() { return authors; }
     public List<String> getSupportedGamemodes() { return supportedGamemodes; }
-    public Map<String, PosRot[]> getSpawns() { return spawns; }
+    public Map<String, List<PosRot>> getSpawns() { return spawns; }
     public Map<String, MapRegionDataStore> getRegions() { return regions; }
     public Map<String, PointEntityDataStore> getPointEntities() { return pointEntities; }
     public Map<String, String> getStrings() { return strings; }
@@ -83,8 +91,8 @@ public abstract class MapID {
 
     protected static class AssembledMapID extends MapID {
 
-        public AssembledMapID(MIDHeader header, String displayName, String description, List<String> authors, List<String> supportedGamemodes, Map<String, PosRot[]> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches, JsonObject extraData) {
-            super(header, displayName, description, authors, supportedGamemodes, spawns, regions, pointEntities, strings, numbers, switches, extraData);
+        public AssembledMapID(MIDHeader header, String displayName, String description, List<String> authors, List<String> supportedGamemodes, Map<String, List<PosRot>> spawns, Map<String, MapRegionDataStore> regions, Map<String, PointEntityDataStore> pointEntities, Map<String, String> strings, Map<String, Number> numbers, Map<String, Boolean> switches, JsonObject extraData) {
+            super(header, true, displayName, description, authors, supportedGamemodes, spawns, regions, pointEntities, strings, numbers, switches, extraData);
         }
 
     }
@@ -97,34 +105,21 @@ public abstract class MapID {
             super(header, false,null, null, new ArrayList<>(), new ArrayList<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new HashMap<>(), new JsonObject());
         }
 
-
         public MapID build() {
-            Map<String, PosRot[]> spawns = Collections.unmodifiableMap(this.spawns);
-            Map<String, MapRegionDataStore> regions = Collections.unmodifiableMap(this.regions);
-            Map<String, PointEntityDataStore> pointEntities = Collections.unmodifiableMap(this.pointEntities);
-            Map<String, String> strings = Collections.unmodifiableMap(this.strings);
-            Map<String, Number> numbers = Collections.unmodifiableMap(this.numbers);
-            Map<String, Boolean> switches = Collections.unmodifiableMap(this.switches);
-
-            return new AssembledMapID(this.header, this.displayName, this.description, this.authors, this.supportedGamemodes, spawns, regions, pointEntities, strings, numbers, switches, this.extraData);
+            return new AssembledMapID(this.header, this.displayName, this.description, this.authors, this.supportedGamemodes, this.spawns, this.regions, this.pointEntities, this.strings, this.numbers, this.switches, this.extraData);
         }
 
         public Builder addSpawn(String spawnlist, PosRot value){
             String spListID = spawnlist.toLowerCase().trim();
-            PosRot[] spList;
-            if(this.spawns.get(spListID) == null){
-                spList = new PosRot[]{value};
-            } else {
-                PosRot[] oldList = this.spawns.get(spawnlist);
-                int oldLength = oldList.length;
-                spList = new PosRot[oldLength + 1];
 
-                for(int i = 0; i < oldLength; i++){
-                    spList[i] = oldList[i];
-                }
-                spList[oldLength] = value; //Append onto the end after extending the list.
+            if(this.spawns.get(spListID) == null){
+                ArrayList<PosRot> newList = new ArrayList<>();
+                newList.add(value);
+                this.spawns.put(spListID, newList);
+
+            } else {
+                this.spawns.get(spawnlist).add(value);
             }
-            this.spawns.put(spListID, spList);
             return this;
         }
 
@@ -174,11 +169,11 @@ public abstract class MapID {
             return this;
         }
 
-        public Builder setSpawnslists(Map<String, PosRot[]> spawns) {
+        public Builder setSpawnslists(Map<String, List<PosRot>> spawns) {
             this.spawns = new HashMap<>();
 
-            for(Map.Entry<String, PosRot[]> e: spawns.entrySet()){
-                this.spawns.put(e.getKey().trim().toLowerCase(), e.getValue());
+            for(Map.Entry<String, List<PosRot>> e: spawns.entrySet()){
+                this.spawns.put(e.getKey().trim(), e.getValue());
             }
             return this;
         }
@@ -233,8 +228,8 @@ public abstract class MapID {
             return this;
         }
 
-        public Builder setSpawnlist(String spawnlist, PosRot[] value){
-            this.spawns.put(spawnlist.trim().toLowerCase(), value);
+        public Builder setSpawnlist(String spawnlist, List<PosRot> value){
+            this.spawns.put(spawnlist.trim(), value);
             return this;
         }
 

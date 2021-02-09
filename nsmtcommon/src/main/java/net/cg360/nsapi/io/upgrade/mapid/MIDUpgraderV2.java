@@ -185,6 +185,29 @@ public class MIDUpgraderV2 implements MIDUpgraderBase {
                 }
             }
 
+            if(eProp instanceof JsonObject){
+                // Can just steal this from NSAPI Commons as there's no generic method.
+                // Case-Sensitive IDs to not apply here (Games should assume lower-case)
+                JsonObject map = (JsonObject) eProp;
+
+                for(Map.Entry<String, JsonElement> e: map.entrySet()){
+
+                    if(e.getValue() instanceof JsonPrimitive){
+                        JsonPrimitive v = (JsonPrimitive) e.getValue();
+
+                        if(v.isBoolean()){
+                            builder.setSwitch(e.getKey(), v.getAsBoolean());
+
+                        } else if (v.isNumber()) {
+                            builder.setNumber(e.getKey(), v.getAsNumber());
+
+                        } else {
+                            builder.setString(e.getKey(), v.getAsString());
+                        }
+                    }
+                }
+            }
+
 
         }
 

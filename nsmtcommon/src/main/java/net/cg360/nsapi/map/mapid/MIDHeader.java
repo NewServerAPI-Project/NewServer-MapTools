@@ -1,4 +1,4 @@
-package net.cg360.nsapi.mapid;
+package net.cg360.nsapi.map.mapid;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

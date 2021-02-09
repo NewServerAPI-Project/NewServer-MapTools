@@ -1,4 +1,4 @@
-package net.cg360.nsapi.io.upgrade.mapid;
+package net.cg360.nsapi.map.io.upgrade.mapid;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -7,11 +7,9 @@ import com.google.gson.JsonPrimitive;
 import net.cg360.nsapi.commons.data.MapRegionDataStore;
 import net.cg360.nsapi.commons.data.PointEntityDataStore;
 import net.cg360.nsapi.commons.math.PosRot;
-import net.cg360.nsapi.mapid.MapID;
-import net.cg360.nsapi.mapid.MIDHeader;
+import net.cg360.nsapi.map.mapid.MapID;
+import net.cg360.nsapi.map.mapid.MIDHeader;
 
-import java.util.ArrayList;
-import java.util.Locale;
 import java.util.Map;
 
 /**

@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import net.cg360.nsapi.commons.data.MapRegionDataStore;
+import net.cg360.nsapi.commons.data.PointEntityDataStore;
 import net.cg360.nsapi.commons.math.PosRot;
 import net.cg360.nsapi.mapid.MapID;
 import net.cg360.nsapi.mapid.MIDHeader;
@@ -134,9 +135,9 @@ public class MIDUpgraderV2 implements MIDUpgraderBase {
             }
 
             if(eRegions instanceof JsonObject){
-                JsonObject regionArray = (JsonObject) eRegions;
+                JsonObject regionsRoot = (JsonObject) eRegions;
 
-                for(Map.Entry<String, JsonElement> pairs : regionArray.entrySet()){
+                for(Map.Entry<String, JsonElement> pairs : regionsRoot.entrySet()){
 
                     if(pairs.getValue() instanceof JsonObject){
                         JsonObject mapRegion = (JsonObject) pairs.getValue();
@@ -151,9 +152,35 @@ public class MIDUpgraderV2 implements MIDUpgraderBase {
                 for(JsonElement entry : regionArray){
 
                     if(entry instanceof JsonObject){
+                        // Alternative notation? Could the ID be inside the mapregion? This would make an array the better option.
                         JsonObject mapRegion = (JsonObject) entry;
                         MapRegionDataStore data = MapRegionDataStore.buildFromJson(null, mapRegion);
                         builder.setMapRegion(data.getIdentifier(), data); // Identifier is lowercase if generated.
+                    }
+                }
+            }
+
+            if(ePointEs instanceof JsonObject){
+                JsonObject pointEntitiesRoot = (JsonObject) ePointEs;
+
+                for(Map.Entry<String, JsonElement> pairs : pointEntitiesRoot.entrySet()){
+
+                    if(pairs.getValue() instanceof JsonObject){
+                        JsonObject pointEntity = (JsonObject) pairs.getValue();
+                        String identity = formatProperties.hasCaseSensitiveIDs() ? pairs.getKey().trim() : pairs.getKey().trim().toLowerCase();
+                        builder.setPointEntity(identity, PointEntityDataStore.buildFromJson(identity, pointEntity));
+                    }
+                }
+
+            } else if(eRegions instanceof JsonArray) {
+                JsonArray pointEntityArray = (JsonArray) eRegions;
+                // Anonymous regions - They use a generated ID.
+                for(JsonElement entry : pointEntityArray){
+
+                    if(entry instanceof JsonObject){
+                        JsonObject pointEntity = (JsonObject) entry;
+                        PointEntityDataStore data = PointEntityDataStore.buildFromJson(null, pointEntity);
+                        builder.setPointEntity(data.getIdentifier(), data); // Identifier is lowercase if generated.
                     }
                 }
             }

@@ -21,7 +21,7 @@ This library, written in **Java 8**, which holds a collection of tools used to r
 
 ---
 
-## MapID Universal
+## MapID Universal (Json)
 *Also referred to as MapID 2*
 
 ![Badge: Version](https://img.shields.io/badge/Version-MapID2-orange?style=for-the-badge)
@@ -35,7 +35,7 @@ It otherwise does not offer systems that run games with the functionality that a
 
 
 ### History:
-The original MapID project started back in March 2020 when Mooncraft Games had moved on to a minigame network while Skyblock progress was restricted. The underlying minigame architecture, which was closed-source, was called NGAPI 1.0. It will stay closed-source due to the actual API being very bloated with the majority of its components being located within a single plugin with multiple connections, thus tying features into the mess of spaghetti code.
+The original MapID project started back in March 2020 when Mooncraft Games had moved on to a minigame network while Skyblock progress was restricted. The underlying minigame architecture, which at the time was closed-source, was called NGAPI 1.0.
 
 The MapID format, while still being developed, initially started with an id, name, description, authors, and properties as the only purpose was to offer simple metadata for minigame maps. Soon, however, the MapRegion was introduced with a limited set of functionality which NGAPI 1 was stuck with. A region could have multiple behavior "tags" (similar to PointEntity types) as well as defining the size and if it was active, however, there were no properties. It shortly got followed up with the PointEntity which is close to its current counterpart in MapID 2 as it had a more flexible design. This is why the modern MapRegion closely mimics the current PointEntity.
 
@@ -58,6 +58,7 @@ A few parts of the format don't change between versions (As of MapID 2.0) as the
     
     "map_storage_type": "schem",
     "map_storage_version": 1,
+    "map_pairing": "none/dir/single",
     
     "case_sensitive_ids": true,
     
@@ -71,6 +72,11 @@ A few parts of the format don't change between versions (As of MapID 2.0) as the
 }
 ```
 
+The `map_pairing` property allows for the MapID to be connected with its map data. There are 3 modes:
+ - `none`: No declared pairing between mapdata and the id.
+ - `dir`: Map is paired to data found inside "mapdata" folder unless overriden.
+ - `single`: Map is paired with a single schematic file.
+
 ### Changelog (MapID 2):
 _(Compared to the internal 1.1 format and codebase used at Mooncraft Games)_
 
@@ -82,6 +88,7 @@ _(Compared to the internal 1.1 format and codebase used at Mooncraft Games)_
   - `[ A ]` Format: Added permanent `map_storage_type` header property.
   - `[ A ]` Format: Added permanent `map_storage_version` header property.
   - `[ A ]` Format: Added permanent `case_sensitive_ids` header property. (Default: false)
+  - `[ A ]` Format: Added permanent `map_pairing` header property. (Default: "none")
   - `[ A ]` Format: Added standalone `extra_data` field.
   - `[ A ]` MapRegions can now be defined as "anonymous" (Array instead of map structure)
   - `[ C ]` Any mention of 'Level' is now changed to 'Map' (As it was artifact of the bedrock roots).
@@ -99,10 +106,45 @@ _(Compared to the internal 1.1 format and codebase used at Mooncraft Games)_
 
 ---
 
-## NSSchem
+## NSSchem (NBT)
 
 ### Summary
 
 NSSchem is loosely based off the well-established MC Schematic format as found in MCEdit, changing the structure in some parts. This makes it incompatible with tools that only support the MC Schematic format, *however*, there will be tools in this library to convert to and from this NSSchem format. **That requires that this project can read, write, and offer interfaces for both!**
+
+### Format:
+NSSchem is an NBT based format which shares a lot in common with the current Minecraft Schematic format.
+
+Latest: `//TODO: Insert link here when available` (NSSchem)
+
+Just like MapID, a few values don't change between versions in order to make identifying and reading these files easier, as well as adding the opportunity to upgrade older formats. The following example below is presented in a JSON-like form.
+
+Note that the `game_version` property is for metadata like purposes with some cases leading to version specific tweaks. Generally, if an update to the format is required to support a new set of data, the `format_version` property should be incremented.
+
+```
+{
+    "identifier": "ExampleSchem123",
+    "format_type": "nsschem",
+    "format_version": 1,
+    
+    "schematic": {
+        
+        
+        
+    },
+    
+    "metadata": {
+    
+        "game_version": {
+            "platform": "bedrock",
+            "version": [1, 16, 0]
+        },
+        "last_exported": "day/month/year @ hour:minute:second",
+        
+    }
+}
+```
+
+Furthermore, an NSSchem can be paired with a MapID file to store metadata for that specific schematic or a group of schematics. This is done inside the mapid
 
 `// TODO: More details will be added once more work is completed`

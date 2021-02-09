@@ -1,0 +1,9 @@
+name: NSAPIMapTools
+main: net.cg360.nsapi.map.MapToolsSpigot
+load: STARTUP
+version: "1.0.0"
+prefix: "nsapimaptools"
+
+authors: [ "CG360", "NSAPI @ Github" ]
+description: "This plugin provides tools to read + write NSAPI map components."
+depend: [ "NSAPICommons" ]

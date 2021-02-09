@@ -134,13 +134,12 @@ Note that the `game_version` property is for metadata like purposes with some ca
     },
     
     "metadata": {
-    
         "game_version": {
             "platform": "bedrock",
             "version": [1, 16, 0]
         },
         "last_exported": "day/month/year @ hour:minute:second",
-        
+        "editor": "NS Map Tools"
     }
 }
 ```

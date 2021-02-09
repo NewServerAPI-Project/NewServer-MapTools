@@ -83,6 +83,7 @@ _(Compared to the internal 1.1 format and codebase used at Mooncraft Games)_
   - `[ A ]` Format: Added permanent `map_storage_version` header property.
   - `[ A ]` Format: Added permanent `case_sensitive_ids` header property. (Default: false)
   - `[ A ]` Format: Added standalone `extra_data` field.
+  - `[ A ]` MapRegions can now be defined as "anonymous" (Array instead of map structure)
   - `[ C ]` Any mention of 'Level' is now changed to 'Map' (As it was artifact of the bedrock roots).
   - `[ C ]` Moved RotatablePosition (now PosRot) to Commons Project.
   - `[ C ]` Moved PointEntity (Stored data) to Commons Project.

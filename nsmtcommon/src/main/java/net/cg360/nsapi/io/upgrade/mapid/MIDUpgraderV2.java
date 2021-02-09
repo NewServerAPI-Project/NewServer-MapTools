@@ -4,11 +4,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import net.cg360.nsapi.commons.data.MapRegionDataStore;
 import net.cg360.nsapi.commons.math.PosRot;
 import net.cg360.nsapi.mapid.MapID;
 import net.cg360.nsapi.mapid.MIDHeader;
 
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -20,7 +22,9 @@ public class MIDUpgraderV2 implements MIDUpgraderBase {
     // Here's a list of considerations to make every time this is modified for
     // compatibility with a new version.
     //
-    // - Use old PosRot parsing (Move it into here)
+    // - Use old PosRot parsing (Copy from commons to here)
+    // - Use old MapRegion parsing (Copy from commons to here)
+    // - Use old PointEntity parsing (Copy from commons to here)
 
 
     public static final String KEY_IDDATA = "map";
@@ -109,6 +113,7 @@ public class MIDUpgraderV2 implements MIDUpgraderBase {
 
                     if(pairs.getValue() instanceof JsonArray){
                         JsonArray spawnArray = (JsonArray) pairs.getValue();
+
                         for(JsonElement arrayChildElement: spawnArray){
 
                             if(arrayChildElement instanceof JsonObject){
@@ -128,6 +133,30 @@ public class MIDUpgraderV2 implements MIDUpgraderBase {
                 }
             }
 
+            if(eRegions instanceof JsonObject){
+                JsonObject regionArray = (JsonObject) eRegions;
+
+                for(Map.Entry<String, JsonElement> pairs : regionArray.entrySet()){
+
+                    if(pairs.getValue() instanceof JsonObject){
+                        JsonObject mapRegion = (JsonObject) pairs.getValue();
+                        String identity = formatProperties.hasCaseSensitiveIDs() ? pairs.getKey().trim() : pairs.getKey().trim().toLowerCase();
+                        builder.setMapRegion(identity, MapRegionDataStore.buildFromJson(identity, mapRegion));
+                    }
+                }
+
+            } else if(eRegions instanceof JsonArray) {
+                JsonArray regionArray = (JsonArray) eRegions;
+                // Anonymous regions - They use a generated ID.
+                for(JsonElement entry : regionArray){
+
+                    if(entry instanceof JsonObject){
+                        JsonObject mapRegion = (JsonObject) entry;
+                        MapRegionDataStore data = MapRegionDataStore.buildFromJson(null, mapRegion);
+                        builder.setMapRegion(data.getIdentifier(), data); // Identifier is lowercase if generated.
+                    }
+                }
+            }
 
 
         }

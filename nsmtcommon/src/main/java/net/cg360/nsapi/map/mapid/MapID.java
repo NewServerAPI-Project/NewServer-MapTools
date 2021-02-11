@@ -250,62 +250,80 @@ public abstract class MapID {
         }
 
         public Builder setSpawnlist(String spawnlist, List<PosRot> value){
-            List<PosRot> posRots = value == null ? new ArrayList<>() : new ArrayList<>(value);
-            this.spawns.put(spawnlist.trim(), posRots);
+
+            if(spawnlist != null) {
+                List<PosRot> posRots = value == null ? new ArrayList<>() : new ArrayList<>(value);
+                this.spawns.put(spawnlist.trim(), posRots);
+            }
             return this;
         }
 
         public Builder setMapRegion(String entry, MapRegionDataStore value){
 
-            if(value == null){
-                this.regions.remove(entry.trim().toLowerCase());
+            if(entry != null){
 
-            } else {
-                this.regions.put(entry.trim().toLowerCase(), value);
+                if(value == null){
+                    this.regions.remove(entry.trim().toLowerCase());
+
+                } else {
+                    this.regions.put(entry.trim().toLowerCase(), value);
+                }
             }
             return this;
         }
 
         public Builder setPointEntity(String entry, PointEntityDataStore value){
 
-            if(value == null){
-                this.pointEntities.remove(entry.trim().toLowerCase());
+            if(entry != null) {
 
-            } else {
-                this.pointEntities.put(entry.trim().toLowerCase(), value);
+                if (value == null) {
+                    this.pointEntities.remove(entry.trim().toLowerCase());
+
+                } else {
+                    this.pointEntities.put(entry.trim().toLowerCase(), value);
+                }
             }
             return this;
         }
 
         public Builder setString(String entry, String value){
 
-            if(value == null){
-                this.strings.remove(entry.trim().toLowerCase());
+            if(entry != null) {
 
-            } else {
-                this.strings.put(entry.trim().toLowerCase(), value);
+                if (value == null) {
+                    this.strings.remove(entry.trim().toLowerCase());
+
+                } else {
+                    this.strings.put(entry.trim().toLowerCase(), value);
+                }
             }
             return this;
         }
 
         public Builder setNumber(String entry, Number value){
 
-            if(value == null){
-                this.numbers.remove(entry.trim().toLowerCase());
+            if(entry != null) {
 
-            } else {
-                this.numbers.put(entry.trim().toLowerCase(), value);
+                if (value == null) {
+                    this.numbers.remove(entry.trim().toLowerCase());
+
+                } else {
+                    this.numbers.put(entry.trim().toLowerCase(), value);
+                }
             }
             return this;
         }
 
         public Builder setSwitch(String entry, Boolean value){
 
-            if(value == null){
-                this.switches.remove(entry.trim().toLowerCase());
+            if(entry != null) {
 
-            } else {
-                this.switches.put(entry.trim().toLowerCase(), value);
+                if (value == null) {
+                    this.switches.remove(entry.trim().toLowerCase());
+
+                } else {
+                    this.switches.put(entry.trim().toLowerCase(), value);
+                }
             }
             return this;
         }

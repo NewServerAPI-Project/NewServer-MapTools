@@ -121,6 +121,7 @@ public abstract class MapID {
         }
 
         public Builder addAuthor(String author){
+
             if(author != null) {
                 authors.add(author);
             }
@@ -128,6 +129,7 @@ public abstract class MapID {
         }
 
         public Builder addSupportedGamemode(String gamemode){
+
             if(gamemode != null) {
                 supportedGamemodes.add(gamemode);
             }
@@ -174,6 +176,7 @@ public abstract class MapID {
             this.spawns = new HashMap<>();
 
             if(spawns != null) {
+
                 for (Map.Entry<String, List<PosRot>> e : spawns.entrySet()) {
                     this.spawns.put(e.getKey().trim(), e.getValue());
                 }
@@ -185,6 +188,7 @@ public abstract class MapID {
             this.regions = new HashMap<>();
 
             if(regions != null) {
+
                 for (Map.Entry<String, MapRegionDataStore> e : regions.entrySet()) {
                     this.regions.put(e.getKey().trim().toLowerCase(), e.getValue());
                 }
@@ -208,6 +212,7 @@ public abstract class MapID {
             this.strings = new HashMap<>();
 
             if(strings != null) {
+
                 for (Map.Entry<String, String> e : strings.entrySet()) {
                     this.strings.put(e.getKey().trim().toLowerCase(), e.getValue());
                 }
@@ -219,6 +224,7 @@ public abstract class MapID {
             this.numbers = new HashMap<>();
 
             if(numbers != null) {
+
                 for (Map.Entry<String, Number> e : numbers.entrySet()) {
                     this.numbers.put(e.getKey().trim().toLowerCase(), e.getValue());
                 }
@@ -230,6 +236,7 @@ public abstract class MapID {
             this.switches = new HashMap<>();
 
             if(switches != null) {
+
                 for (Map.Entry<String, Boolean> e : switches.entrySet()) {
                     this.switches.put(e.getKey().trim().toLowerCase(), e.getValue());
                 }
@@ -249,8 +256,10 @@ public abstract class MapID {
         }
 
         public Builder setMapRegion(String entry, MapRegionDataStore value){
+
             if(value == null){
                 this.regions.remove(entry.trim().toLowerCase());
+
             } else {
                 this.regions.put(entry.trim().toLowerCase(), value);
             }
@@ -258,8 +267,10 @@ public abstract class MapID {
         }
 
         public Builder setPointEntity(String entry, PointEntityDataStore value){
+
             if(value == null){
                 this.pointEntities.remove(entry.trim().toLowerCase());
+
             } else {
                 this.pointEntities.put(entry.trim().toLowerCase(), value);
             }
@@ -267,8 +278,10 @@ public abstract class MapID {
         }
 
         public Builder setString(String entry, String value){
+
             if(value == null){
                 this.strings.remove(entry.trim().toLowerCase());
+
             } else {
                 this.strings.put(entry.trim().toLowerCase(), value);
             }
@@ -276,8 +289,10 @@ public abstract class MapID {
         }
 
         public Builder setNumber(String entry, Number value){
+
             if(value == null){
                 this.numbers.remove(entry.trim().toLowerCase());
+
             } else {
                 this.numbers.put(entry.trim().toLowerCase(), value);
             }
@@ -285,8 +300,10 @@ public abstract class MapID {
         }
 
         public Builder setSwitch(String entry, Boolean value){
+
             if(value == null){
                 this.switches.remove(entry.trim().toLowerCase());
+
             } else {
                 this.switches.put(entry.trim().toLowerCase(), value);
             }

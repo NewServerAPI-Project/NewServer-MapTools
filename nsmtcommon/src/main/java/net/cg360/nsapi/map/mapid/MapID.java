@@ -104,26 +104,33 @@ public abstract class MapID {
         }
 
         public Builder addSpawn(String spawnlist, PosRot value){
-            String spListID = spawnlist.toLowerCase().trim();
 
-            if(this.spawns.get(spListID) == null){
-                ArrayList<PosRot> newList = new ArrayList<>();
-                newList.add(value);
-                this.spawns.put(spListID, newList);
+            if((value != null) && (spawnlist != null)) {
+                String spListID = spawnlist.toLowerCase().trim();
 
-            } else {
-                this.spawns.get(spawnlist).add(value);
+                if (this.spawns.get(spListID) == null) {
+                    ArrayList<PosRot> newList = new ArrayList<>();
+                    newList.add(value);
+                    this.spawns.put(spListID, newList);
+
+                } else {
+                    this.spawns.get(spawnlist).add(value);
+                }
             }
             return this;
         }
 
         public Builder addAuthor(String author){
-            authors.add(author);
+            if(author != null) {
+                authors.add(author);
+            }
             return this;
         }
 
         public Builder addSupportedGamemode(String gamemode){
-            supportedGamemodes.add(gamemode);
+            if(gamemode != null) {
+                supportedGamemodes.add(gamemode);
+            }
             return this;
         }
 
@@ -144,30 +151,32 @@ public abstract class MapID {
         }
 
         public Builder setAuthors(String[] authors) {
-            this.authors = new ArrayList<>(Arrays.asList(authors));
+            this.authors = authors == null ? new ArrayList<>() : new ArrayList<>(Arrays.asList(authors));
             return this;
         }
 
         public Builder setSupportedGamemodes(String[] supportedGamemodes) {
-            this.supportedGamemodes = new ArrayList<>(Arrays.asList(supportedGamemodes));
+            this.supportedGamemodes = supportedGamemodes == null ? new ArrayList<>() : new ArrayList<>(Arrays.asList(supportedGamemodes));
             return this;
         }
 
         public Builder setAuthorsList(List<String> authors) {
-            this.authors = new ArrayList<>(authors);
+            this.authors = authors == null ? new ArrayList<>() : new ArrayList<>(authors);
             return this;
         }
 
         public Builder setSupportedGamemodesList(List<String> supportedGamemodes) {
-            this.supportedGamemodes = new ArrayList<>(supportedGamemodes);
+            this.supportedGamemodes = supportedGamemodes == null ? new ArrayList<>() : new ArrayList<>(supportedGamemodes);
             return this;
         }
 
         public Builder setSpawnslists(Map<String, List<PosRot>> spawns) {
             this.spawns = new HashMap<>();
 
-            for(Map.Entry<String, List<PosRot>> e: spawns.entrySet()){
-                this.spawns.put(e.getKey().trim(), e.getValue());
+            if(spawns != null) {
+                for (Map.Entry<String, List<PosRot>> e : spawns.entrySet()) {
+                    this.spawns.put(e.getKey().trim(), e.getValue());
+                }
             }
             return this;
         }
@@ -175,8 +184,10 @@ public abstract class MapID {
         public Builder setMapRegions(Map<String, MapRegionDataStore> regions) {
             this.regions = new HashMap<>();
 
-            for(Map.Entry<String, MapRegionDataStore> e: regions.entrySet()){
-                this.regions.put(e.getKey().trim().toLowerCase(), e.getValue());
+            if(regions != null) {
+                for (Map.Entry<String, MapRegionDataStore> e : regions.entrySet()) {
+                    this.regions.put(e.getKey().trim().toLowerCase(), e.getValue());
+                }
             }
             return this;
         }
@@ -184,8 +195,11 @@ public abstract class MapID {
         public Builder setPointEntities(Map<String, PointEntityDataStore> pointEntities) {
             this.pointEntities = new HashMap<>();
 
-            for(Map.Entry<String, PointEntityDataStore> e: pointEntities.entrySet()){
-                this.pointEntities.put(e.getKey().trim().toLowerCase(), e.getValue());
+            if(pointEntities != null) {
+
+                for (Map.Entry<String, PointEntityDataStore> e : pointEntities.entrySet()) {
+                    this.pointEntities.put(e.getKey().trim().toLowerCase(), e.getValue());
+                }
             }
             return this;
         }
@@ -193,17 +207,21 @@ public abstract class MapID {
         public Builder setStrings(Map<String, String> strings) {
             this.strings = new HashMap<>();
 
-            for(Map.Entry<String, String> e: strings.entrySet()){
-                this.strings.put(e.getKey().trim().toLowerCase(), e.getValue());
+            if(strings != null) {
+                for (Map.Entry<String, String> e : strings.entrySet()) {
+                    this.strings.put(e.getKey().trim().toLowerCase(), e.getValue());
+                }
             }
             return this;
         }
 
-        public Builder setNumbers(Map<String, Number> floats) {
+        public Builder setNumbers(Map<String, Number> numbers) {
             this.numbers = new HashMap<>();
 
-            for(Map.Entry<String, Number> e: floats.entrySet()){
-                this.numbers.put(e.getKey().trim().toLowerCase(), e.getValue());
+            if(numbers != null) {
+                for (Map.Entry<String, Number> e : numbers.entrySet()) {
+                    this.numbers.put(e.getKey().trim().toLowerCase(), e.getValue());
+                }
             }
             return this;
         }
@@ -211,8 +229,10 @@ public abstract class MapID {
         public Builder setSwitches(Map<String, Boolean> switches) {
             this.switches = new HashMap<>();
 
-            for(Map.Entry<String, Boolean> e: switches.entrySet()){
-                this.switches.put(e.getKey().trim().toLowerCase(), e.getValue());
+            if(switches != null) {
+                for (Map.Entry<String, Boolean> e : switches.entrySet()) {
+                    this.switches.put(e.getKey().trim().toLowerCase(), e.getValue());
+                }
             }
             return this;
         }
@@ -223,32 +243,53 @@ public abstract class MapID {
         }
 
         public Builder setSpawnlist(String spawnlist, List<PosRot> value){
-            this.spawns.put(spawnlist.trim(), value);
+            List<PosRot> posRots = value == null ? new ArrayList<>() : new ArrayList<>(value);
+            this.spawns.put(spawnlist.trim(), posRots);
             return this;
         }
 
         public Builder setMapRegion(String entry, MapRegionDataStore value){
-            this.regions.put(entry.trim().toLowerCase(), value);
+            if(value == null){
+                this.regions.remove(entry.trim().toLowerCase());
+            } else {
+                this.regions.put(entry.trim().toLowerCase(), value);
+            }
             return this;
         }
 
         public Builder setPointEntity(String entry, PointEntityDataStore value){
-            this.pointEntities.put(entry.trim().toLowerCase(), value);
+            if(value == null){
+                this.pointEntities.remove(entry.trim().toLowerCase());
+            } else {
+                this.pointEntities.put(entry.trim().toLowerCase(), value);
+            }
             return this;
         }
 
         public Builder setString(String entry, String value){
-            this.strings.put(entry.trim().toLowerCase(), value);
+            if(value == null){
+                this.strings.remove(entry.trim().toLowerCase());
+            } else {
+                this.strings.put(entry.trim().toLowerCase(), value);
+            }
             return this;
         }
 
         public Builder setNumber(String entry, Number value){
-            this.numbers.put(entry.trim().toLowerCase(), value);
+            if(value == null){
+                this.numbers.remove(entry.trim().toLowerCase());
+            } else {
+                this.numbers.put(entry.trim().toLowerCase(), value);
+            }
             return this;
         }
 
         public Builder setSwitch(String entry, Boolean value){
-            this.switches.put(entry.trim().toLowerCase(), value);
+            if(value == null){
+                this.switches.remove(entry.trim().toLowerCase());
+            } else {
+                this.switches.put(entry.trim().toLowerCase(), value);
+            }
             return this;
         }
     }

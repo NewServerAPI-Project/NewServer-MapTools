@@ -12,9 +12,19 @@ public enum Cube32ChunkType {
         this.chunkTypeID = chunkTypeID;
     }
 
-    public int getChunkyTypeID() {
-        return chunkTypeID;
+    public int getChunkyTypeID() { return chunkTypeID; }
+
+
+    public static Cube32ChunkType getFromID(int id){
+        switch (id){
+            case 1:
+                return FULL;
+            case 2:
+                return EMPTY;
+
+            case 0:
+            default:
+                return DEFAULT;
+        }
     }
-
-
 }

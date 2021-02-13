@@ -14,4 +14,16 @@ public enum Cube32Encode {
     public int getEncodeTypeID() {
         return encodeTypeID;
     }
+
+
+    public static Cube32Encode getFromID(int id){
+        switch (id){
+            case 1:
+                return RUN_LENGTH;
+
+            case 0:
+            default:
+                return DEFAULT;
+        }
+    }
 }

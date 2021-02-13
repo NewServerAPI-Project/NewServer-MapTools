@@ -13,7 +13,7 @@ This library, written in **Java 8**, which holds a collection of tools used to r
 ### Format support list
 
 - [x] MapID 2 (json)
-- [ ] NewServer Schem (nbt)
+- [x] NewServer Cube32 (nbt)
 - [ ] MC Schematic (nbt)
   - Supports all base features.
   - Partial MCEdit Unified support (Biomes)
@@ -56,9 +56,8 @@ A few parts of the format don't change between versions (As of MapID 2.0) as the
     "identifier": "ExampleMap",
     "format_version": 2,
     
-    "map_storage_type": "schem",
+    "map_storage_type": "nscube",
     "map_storage_version": 1,
-    "map_pairing": "none/dir/single",
     
     "case_sensitive_ids": true,
     
@@ -72,11 +71,6 @@ A few parts of the format don't change between versions (As of MapID 2.0) as the
 }
 ```
 
-The `map_pairing` property allows for the MapID to be connected with its map data. There are 3 modes:
- - `none`: No declared pairing between mapdata and the id.
- - `dir`: Map is paired to data found inside "mapdata" folder unless overriden.
- - `single`: Map is paired with a single schematic file.
-
 ### Changelog (MapID 2):
 _(Compared to the internal 1.1 format and codebase used at Mooncraft Games)_
 
@@ -88,7 +82,6 @@ _(Compared to the internal 1.1 format and codebase used at Mooncraft Games)_
   - `[ A ]` Format: Added permanent `map_storage_type` header property.
   - `[ A ]` Format: Added permanent `map_storage_version` header property.
   - `[ A ]` Format: Added permanent `case_sensitive_ids` header property. (Default: false)
-  - `[ A ]` Format: Added permanent `map_pairing` header property. (Default: "none")
   - `[ A ]` Format: Added standalone `extra_data` field.
   - `[ A ]` MapRegions can now be defined as "anonymous" (Array instead of map structure)
   - `[ C ]` Any mention of 'Level' is now changed to 'Map' (As it was artifact of the bedrock roots).
@@ -106,44 +99,56 @@ _(Compared to the internal 1.1 format and codebase used at Mooncraft Games)_
 
 ---
 
-## NSSchem (NBT)
+## NS Cube32 (NBT)
 
 ### Summary
 
-NSSchem is loosely based off the well-established MC Schematic format as found in MCEdit, changing the structure in some parts. This makes it incompatible with tools that only support the MC Schematic format, *however*, there will be tools in this library to convert to and from this NSSchem format. **That requires that this project can read, write, and offer interfaces for both!**
+Cube32 is a chunk-based world storage format with parallels to Minecraft Java's own chunk format. It stores "chunks" in 32x32x32 cubes with methods to reduce file size applied across the format. Any metadata for worlds stored in this format should be stored in a companion **MapID** file.
 
 ### Format:
-NSSchem is an NBT based format which shares a lot in common with the current Minecraft Schematic format.
-
-Latest: `//TODO: Insert link here when available` (NSSchem)
-
-Just like MapID, a few values don't change between versions in order to make identifying and reading these files easier, as well as adding the opportunity to upgrade older formats. The following example below is presented in a JSON-like form.
-
-Note that the `game_version` property is for metadata like purposes with some cases leading to version specific tweaks. Generally, if an update to the format is required to support a new set of data, the `format_version` property should be incremented.
+*Using a JSON like structure for display purposes.*
 
 ```
 {
-    "identifier": "ExampleSchem123",
-    "format_type": "nsschem",
-    "format_version": 1,
+    "format_type": "cube32",
+    "chunk_type": "default/full/empty"
+    "chunk_version": 1,
+    "encode_mode": 1,
     
-    "schematic": {
-        
-        
-        
-    },
+    "position": [     // Chunk coords (32x normal coords, offset from center point.)
+        1,
+        -2,
+        5
+    ],
     
-    "metadata": {
-        "game_version": {
-            "platform": "bedrock",
-            "version": [1, 16, 0]
-        },
-        "last_exported": "day/month/year @ hour:minute:second",
-        "editor": "NS Map Tools"
+    "data": {
+        "palette": [
+            {
+                "identifier": "minecraft:furnace",
+                "properties": {
+                    "lit": "true" // All properties are strings.
+                }
+            },
+            {
+                "identifier": "minecraft:grass"
+            }
+        ]
+        "runlength": 4  //Amount of bits to use for length in runlength. Longer runs need more bits.
+        "blocks": [ bytearrayhere ],
+        
+        "tileentities": [
+            {tile entity nbt -> see minecraft chunk format} // I'll write this in later
+        ]
     }
 }
 ```
 
-Furthermore, an NSSchem can be paired with a MapID file to store metadata for that specific schematic or a group of schematics. This is done inside the mapid
-
-`// TODO: More details will be added once more work is completed`
+Some notes about the format:
+ - `format_version` should not change. It's only there to mark "valid" files so the library can properly scream about errors.
+ - `chunk_type` offers shortcuts based on a chunk's state.
+   - `default`: Use the default file structure.
+   - `empty`: There's no block data. Chunk is just air.
+   - `full`: Chunk is just one block thus an array is useless
+ - `encode_mode` can be different per-chunk. The types are:
+   - 0: No added compression other than the use of the palette.
+   - 1: run-length encoding is applied. (Group together runs of blocks)

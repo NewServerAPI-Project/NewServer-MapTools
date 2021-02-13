@@ -111,7 +111,7 @@ Cube32 is a chunk-based world storage format with parallels to Minecraft Java's 
 ```
 {
     "format_type": "cube32",
-    "chunk_type": "default/full/empty"
+    "chunk_type": 0,
     "chunk_version": 1,
     "encode_mode": 1,
     
@@ -146,9 +146,9 @@ Cube32 is a chunk-based world storage format with parallels to Minecraft Java's 
 Some notes about the format:
  - `format_version` should not change. It's only there to mark "valid" files so the library can properly scream about errors.
  - `chunk_type` offers shortcuts based on a chunk's state.
-   - `default`: Use the default file structure.
-   - `empty`: There's no block data. Chunk is just air.
-   - `full`: Chunk is just one block thus an array is useless
+   - `0` = ***Default:*** Use the default file structure.
+   - `1` = ***Empty:*** There's no block data. Chunk is just air.
+   - `2` = ***Full:*** Chunk is just one block thus an array is useless. Set the chunk's block
  - `encode_mode` can be different per-chunk. The types are:
    - 0: No added compression other than the use of the palette.
    - 1: run-length encoding is applied. (Group together runs of blocks)

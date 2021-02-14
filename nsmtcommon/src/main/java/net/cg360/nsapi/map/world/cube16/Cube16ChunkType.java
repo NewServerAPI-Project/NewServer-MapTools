@@ -4,7 +4,9 @@ public enum Cube16ChunkType {
 
     DEFAULT(0),
     FULL(1),
-    EMPTY(2);
+    EMPTY(2),
+    ENTITY(3); // Entity chunks use the same header.
+    // When contributing, add to the switch below.
 
     private final int chunkTypeID;
 
@@ -21,6 +23,8 @@ public enum Cube16ChunkType {
                 return FULL;
             case 2:
                 return EMPTY;
+            case 3:
+                return ENTITY;
 
             case 0:
             default:

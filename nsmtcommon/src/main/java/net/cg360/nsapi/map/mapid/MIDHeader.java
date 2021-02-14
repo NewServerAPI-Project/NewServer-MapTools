@@ -3,6 +3,7 @@ package net.cg360.nsapi.map.mapid;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import net.cg360.nsapi.commons.Check;
 import net.cg360.nsapi.commons.Utility;
 import net.cg360.nsapi.commons.exception.MissingPropertyException;
 
@@ -27,7 +28,7 @@ public final class MIDHeader {
     }
 
     protected MIDHeader(String mapPath, String identifier, Integer formatVersion, String mapStorageType, String mapStorageVersion, Boolean hasCaseSensitiveIDs) {
-        if(formatVersion == null) throw new IllegalArgumentException("MapID is missing a 'format_version' property.");
+        Check.nullParam(formatVersion, "MapID", "format_version");
 
         this.mapPath = mapPath;
         this.identifier = identifier == null ? "generated-"+ Utility.generateUniqueToken(5, 3).toLowerCase() : identifier.trim().toLowerCase();
@@ -48,7 +49,7 @@ public final class MIDHeader {
             JsonPrimitive p = (JsonPrimitive) formatElement;
             if (p.isNumber()) formatV = p.getAsNumber().intValue();
         }
-        if(formatV == null) throw new MissingPropertyException("MapID is missing a 'format_version' property.");
+        Check.missingProperty(formatV, "MapID", "format_version");
 
         JsonElement idElement = root.get("identifier");
         if(idElement instanceof JsonPrimitive){

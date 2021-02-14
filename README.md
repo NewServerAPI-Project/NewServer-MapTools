@@ -111,8 +111,8 @@ Cube16 is a chunk-based world storage format with parallels to Minecraft Java's 
 ```
 {
     "format_type": "cube32",
+    "format_version": 1,
     "chunk_type": 0,
-    "chunk_version": 1,
     "encode_mode": 1,
     
     "position": [     // Chunk coords (16x normal coords, offset from center point.)
@@ -144,7 +144,7 @@ Cube16 is a chunk-based world storage format with parallels to Minecraft Java's 
 ```
 
 Some notes about the format:
- - `format_version` should not change. It's only there to mark "valid" files so the library can properly scream about errors.
+ - `format_type` should not change. It's only there to mark "valid" files so the library can properly scream about errors.
  - `chunk_type` offers shortcuts based on a chunk's state.
    - `0` = ***Default:*** Use the default file structure.
    - `1` = ***Empty:*** There's no block data. Chunk is just air.

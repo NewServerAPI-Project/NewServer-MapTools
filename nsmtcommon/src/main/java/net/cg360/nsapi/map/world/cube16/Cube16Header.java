@@ -28,10 +28,10 @@ public class Cube16Header {
 
 
     public Cube16Header(Integer formatVersion, Cube16ChunkType chunkType, Cube16Encode encodeMode, Integer posX, Integer posY, Integer posZ) {
-        Check.nullParam(formatVersion, "Cube16 Chunk", "formatVersion");
-        Check.nullParam(posX, "Cube16 Chunk", "posX");
-        Check.nullParam(posY, "Cube16 Chunk", "posY");
-        Check.nullParam(posZ, "Cube16 Chunk", "posZ");
+        Check.nullParam(formatVersion, "formatVersion");
+        Check.nullParam(posX, "posX");
+        Check.nullParam(posY, "posY");
+        Check.nullParam(posZ, "posZ");
         this.formatVersion = formatVersion;
 
         this.chunkType = chunkType == null ? Cube16ChunkType.DEFAULT : chunkType; // Kinda bad if this is missing. o.o

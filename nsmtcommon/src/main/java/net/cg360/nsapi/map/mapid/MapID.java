@@ -1,7 +1,7 @@
 package net.cg360.nsapi.map.mapid;
 
 import com.google.gson.JsonObject;
-import net.cg360.nsapi.Immutable;
+import net.cg360.nsapi.commons.Immutable;
 import net.cg360.nsapi.commons.Utility;
 import net.cg360.nsapi.commons.data.MapRegionDataStore;
 import net.cg360.nsapi.commons.data.PointEntityDataStore;

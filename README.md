@@ -113,7 +113,6 @@ Cube16 is a chunk-based world storage format with parallels to Minecraft Java's 
     "format_type": "cube16",
     "format_version": 1,
     "chunk_type": 0,
-    "encode_mode": 1,
     
     "position": [     // Chunk coords (16x normal coords, offset from center point.)
         1,
@@ -121,7 +120,8 @@ Cube16 is a chunk-based world storage format with parallels to Minecraft Java's 
         5
     ],
     
-    "data": {
+    "blockdata": { // Only available in chunk_type = 0
+        "encode_mode": 1,
         "palette": [
             {
                 "identifier": "minecraft:furnace",
@@ -140,6 +140,12 @@ Cube16 is a chunk-based world storage format with parallels to Minecraft Java's 
             {tile entity nbt -> see minecraft chunk format} // I'll write this in later
         ]
     }
+    
+    "entitydata": { // Only present in chunk_type = 1
+        "entities": [
+            // Use Minecraft's own chunk entity format.
+        ]
+    }
 }
 ```
 
@@ -147,8 +153,7 @@ Some notes about the format:
  - `format_type` should not change. It's only there to mark "valid" files so the library can properly scream about errors.
  - `chunk_type` offers shortcuts based on a chunk's state.
    - `0` = ***Default:*** Use the default file structure.
-   - `1` = ***Full:*** Chunk is just one block thus an array is useless. Set the chunk's block.
-   - `2` = ***Entity:*** Chunk stores no block data. Only entities.
+   - `1` = ***Entity:*** Chunk stores no block data. Only entities.
  - `encode_mode` can be different per-chunk. Applying to the `blocks` property, the types are:
    - 0: No added compression other than the use of the palette.
    - 1: run-length encoding is applied. (Group together runs of blocks)

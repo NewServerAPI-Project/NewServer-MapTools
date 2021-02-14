@@ -110,7 +110,7 @@ Cube16 is a chunk-based world storage format with parallels to Minecraft Java's 
 
 ```
 {
-    "format_type": "cube32",
+    "format_type": "cube16",
     "format_version": 1,
     "chunk_type": 0,
     "encode_mode": 1,

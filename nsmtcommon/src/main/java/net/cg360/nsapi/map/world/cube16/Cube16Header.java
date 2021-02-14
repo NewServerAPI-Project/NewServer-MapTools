@@ -1,5 +1,6 @@
 package net.cg360.nsapi.map.world.cube16;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -8,7 +9,8 @@ import net.cg360.nsapi.commons.exception.MissingPropertyException;
 
 import java.util.Optional;
 
-// Consider 16. 32 may have issues with larger worlds + chunk loading.
+// Could consider a 32x format. Would use empty/full chunk modes less but run-length
+// encoding would probably get a boost.
 public class Cube16Header {
 
     public static final String FORMAT_TYPE = "cube16";
@@ -48,17 +50,61 @@ public class Cube16Header {
         JsonElement formatType = root.get("format_type");
         JsonElement formatElement = root.get("format_version");
 
+        JsonElement chunkTypeElement = root.get("chunk_type");
+        JsonElement encodeModeElement = root.get("encode_mode");
+
+        JsonElement positionElement = root.get("position");
+
         if(formatType instanceof JsonPrimitive) {
             JsonPrimitive formatPrim = (JsonPrimitive) formatType;
 
-            if(formatPrim.getAsString().equalsIgnoreCase(FORMAT_TYPE)) {
+            if(formatPrim.getAsString().equalsIgnoreCase(FORMAT_TYPE)) { // If this is false, it's probably not a Cube16 chunk.
 
                 if (formatElement instanceof JsonPrimitive) {
                     JsonPrimitive p = (JsonPrimitive) formatElement;
                     if (p.isNumber()) formatV = p.getAsNumber().intValue();
                 }
-                if (formatV == null) throw new MissingPropertyException("Cube16 Chunk is missing a 'format_version' property.");
+                Check.missingProperty(formatV, "Cube16 chunk", "format_version");
 
+
+                if (chunkTypeElement instanceof JsonPrimitive) {
+                    JsonPrimitive p = (JsonPrimitive) chunkTypeElement;
+                    if (p.isNumber()) chunkT = Cube16ChunkType.getFromID(p.getAsNumber().intValue());
+                }
+
+                if (encodeModeElement instanceof JsonPrimitive) {
+                    JsonPrimitive p = (JsonPrimitive) encodeModeElement;
+                    if (p.isNumber()) encode = Cube16Encode.getFromID(p.getAsNumber().intValue());
+                }
+
+
+                if (positionElement instanceof JsonArray) {
+                    JsonArray posArray = (JsonArray) positionElement;
+
+                    if(posArray.size() >= 3) {
+                        JsonElement xElement = posArray.get(0);
+                        JsonElement yElement = posArray.get(1);
+                        JsonElement zElement = posArray.get(2);
+
+                        if (xElement instanceof JsonPrimitive) {
+                            JsonPrimitive p = (JsonPrimitive) xElement;
+                            if (p.isNumber()) pX = p.getAsNumber().intValue();
+                        }
+
+                        if (yElement instanceof JsonPrimitive) {
+                            JsonPrimitive p = (JsonPrimitive) yElement;
+                            if (p.isNumber()) pY = p.getAsNumber().intValue();
+                        }
+
+                        if (zElement instanceof JsonPrimitive) {
+                            JsonPrimitive p = (JsonPrimitive) zElement;
+                            if (p.isNumber()) pZ = p.getAsNumber().intValue();
+                        }
+                    }
+                    Check.missingProperty(pX, "Cube16 Chunk", "position (x)");
+                    Check.missingProperty(pY, "Cube16 Chunk", "position (y)");
+                    Check.missingProperty(pZ, "Cube16 Chunk", "position (z)");
+                }
 
                 return Optional.of(new Cube16Header(formatV, chunkT, encode, pX, pY, pZ));
             }

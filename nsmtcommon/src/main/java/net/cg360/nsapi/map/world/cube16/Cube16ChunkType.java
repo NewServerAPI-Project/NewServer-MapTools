@@ -1,6 +1,6 @@
-package net.cg360.nsapi.map.world.cube32;
+package net.cg360.nsapi.map.world.cube16;
 
-public enum Cube32ChunkType {
+public enum Cube16ChunkType {
 
     DEFAULT(0),
     FULL(1),
@@ -8,14 +8,14 @@ public enum Cube32ChunkType {
 
     private final int chunkTypeID;
 
-    Cube32ChunkType(int chunkTypeID){
+    Cube16ChunkType(int chunkTypeID){
         this.chunkTypeID = chunkTypeID;
     }
 
     public int getChunkyTypeID() { return chunkTypeID; }
 
 
-    public static Cube32ChunkType getFromID(int id){
+    public static Cube16ChunkType getFromID(int id){
         switch (id){
             case 1:
                 return FULL;

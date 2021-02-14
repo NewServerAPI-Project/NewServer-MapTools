@@ -1,13 +1,13 @@
-package net.cg360.nsapi.map.world.cube32;
+package net.cg360.nsapi.map.world.cube16;
 
-public enum Cube32Encode {
+public enum Cube16Encode {
 
     DEFAULT(0),
     RUN_LENGTH(1);
 
     private final int encodeTypeID;
 
-    Cube32Encode(int encodeTypeID){
+    Cube16Encode(int encodeTypeID){
         this.encodeTypeID = encodeTypeID;
     }
 
@@ -16,7 +16,7 @@ public enum Cube32Encode {
     }
 
 
-    public static Cube32Encode getFromID(int id){
+    public static Cube16Encode getFromID(int id){
         switch (id){
             case 1:
                 return RUN_LENGTH;

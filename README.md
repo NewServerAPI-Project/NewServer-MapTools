@@ -99,11 +99,11 @@ _(Compared to the internal 1.1 format and codebase used at Mooncraft Games)_
 
 ---
 
-## NS Cube32 (NBT)
+## NS Cube16 (NBT)
 
 ### Summary
 
-Cube32 is a chunk-based world storage format with parallels to Minecraft Java's own chunk format. It stores "chunks" in 32x32x32 cubes with methods to reduce file size applied across the format. Any metadata for worlds stored in this format should be stored in a companion **MapID** file.
+Cube16 is a chunk-based world storage format with parallels to Minecraft Java's own chunk format. It stores "chunks" in 16x16x16 cubes with methods to reduce file size applied across the format. Any metadata for worlds stored in this format should be stored in a companion **MapID** file.
 
 ### Format:
 *Using a JSON like structure for display purposes.*
@@ -115,7 +115,7 @@ Cube32 is a chunk-based world storage format with parallels to Minecraft Java's 
     "chunk_version": 1,
     "encode_mode": 1,
     
-    "position": [     // Chunk coords (32x normal coords, offset from center point.)
+    "position": [     // Chunk coords (16x normal coords, offset from center point.)
         1,
         -2,
         5

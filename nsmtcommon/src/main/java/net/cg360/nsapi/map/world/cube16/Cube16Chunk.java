@@ -58,10 +58,15 @@ public abstract class Cube16Chunk {
         return new Cube16BlockBuffer(this, blockData);
     }
 
+
+
     public Cube16Encode getEncodeMode() { return encodeMode; }
     public List<Block> getPalette() { return palette; }
     public int getPaletteBitDepth() { return paletteBitDepth; }
 
     public List<CompoundTag> getTileEntities() { return tileEntities; }
     public List<CompoundTag> getChunkEntityData() { return chunkEntityData; }
+
+
+    public void setImmutable() { isImmutable = true; } // If something is immutable, why should it be able to be made mutable?
 }

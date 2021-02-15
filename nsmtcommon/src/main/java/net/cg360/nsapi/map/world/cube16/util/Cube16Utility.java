@@ -1,6 +1,6 @@
-package net.cg360.nsapi.map.world.cube16;
+package net.cg360.nsapi.map.world.cube16.util;
 
-import net.cg360.nsapi.map.world.cube16.format.Cube16Chunk;
+import net.cg360.nsapi.map.world.cube16.Cube16Chunk;
 
 public class Cube16Utility {
 

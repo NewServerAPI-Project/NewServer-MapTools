@@ -1,4 +1,4 @@
-package net.cg360.nsapi.map.world.cube16.format;
+package net.cg360.nsapi.map.world.cube16;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

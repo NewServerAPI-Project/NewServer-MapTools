@@ -1,4 +1,4 @@
-package net.cg360.nsapi.map.mapid;
+package net.cg360.nsapi.map.mapid.util;
 
 /**
  * @author CG360;

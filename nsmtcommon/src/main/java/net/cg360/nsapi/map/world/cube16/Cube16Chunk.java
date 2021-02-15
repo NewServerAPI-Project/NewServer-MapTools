@@ -20,6 +20,10 @@ public abstract class Cube16Chunk {
     public static final int BIOME_SCALE = 4; // The amount of blocks biome data covers. Vanilla is 4x4x4 as of 1.15
     public static final byte[] SUPPORTED_PALETTE_SCALES = { 1, 2, 4, 8, 16 };
 
+    //TODO: Constructor + Builder.
+    //TODO: On addblock, if the palette size is increased, ensure the bit depth is correct. If bit depth is updated, recalculate
+    //      the positions of each block + update all the block buffer positions (+ bit positions).
+
     // Blocks: Serialization
     protected Cube16Encode encodeMode;
     protected List<Block> palette;
@@ -31,6 +35,7 @@ public abstract class Cube16Chunk {
 
     // -- Access --
     protected Cube16BlockBuffer primaryBlockBuffer;
+    protected List<Cube16BlockBuffer> blockBuffers;
     protected boolean isImmutable;
 
 
@@ -55,7 +60,9 @@ public abstract class Cube16Chunk {
 
     /** @return A new block buffer for accessing blockData.*/
     public Cube16BlockBuffer getBlockBuffer() {
-        return new Cube16BlockBuffer(this, blockData);
+        Cube16BlockBuffer buffer = new Cube16BlockBuffer(this, blockData);
+        blockBuffers.add(buffer);
+        return buffer;
     }
 
 

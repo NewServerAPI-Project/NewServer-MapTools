@@ -4,7 +4,7 @@ import net.cg360.nsapi.map.world.cube16.Cube16Chunk;
 
 public class Cube16Utility {
 
-    protected static int getBlockIndex(int x, int y, int z) {
+    public static int getBlockIndex(int x, int y, int z) {
         return x + (z * Cube16Chunk.CHUNK_SIZE) + (y * Cube16Chunk.CHUNK_SIZE ^ 2);
     }
 
@@ -12,7 +12,7 @@ public class Cube16Utility {
      * Calculates the byte (and bit) starting position for a block to be written.
      * @return 2 ints | 1st = the byte in the ByteBuffer, 2nd = the bit within the byte where the block starts.
      */
-    protected static short[] getBufferIndex(int bitDepth, int x, int y, int z) {
+    public static short[] getBufferIndex(int bitDepth, int x, int y, int z) {
         int index = getBlockIndex(x, y, z);
 
         // Scale it down so that the index is divided up.

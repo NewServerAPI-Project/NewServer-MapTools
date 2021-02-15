@@ -1,11 +1,11 @@
-package net.cg360.nsapi.map.world.cube16;
+package net.cg360.nsapi.map.world.cube16.format;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import net.cg360.nsapi.commons.Check;
-import net.cg360.nsapi.commons.exception.MissingPropertyException;
+import net.cg360.nsapi.map.world.cube16.enums.Cube16ChunkType;
 
 import java.util.Optional;
 

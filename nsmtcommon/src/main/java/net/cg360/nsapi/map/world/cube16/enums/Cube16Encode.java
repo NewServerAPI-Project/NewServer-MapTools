@@ -1,4 +1,4 @@
-package net.cg360.nsapi.map.world.cube16;
+package net.cg360.nsapi.map.world.cube16.enums;
 
 public enum Cube16Encode {
 

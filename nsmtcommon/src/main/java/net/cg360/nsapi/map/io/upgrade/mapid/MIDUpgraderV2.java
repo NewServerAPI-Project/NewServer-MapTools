@@ -7,8 +7,8 @@ import com.google.gson.JsonPrimitive;
 import net.cg360.nsapi.commons.data.MapRegionDataStore;
 import net.cg360.nsapi.commons.data.PointEntityDataStore;
 import net.cg360.nsapi.commons.math.PosRot;
-import net.cg360.nsapi.map.mapid.MapID;
-import net.cg360.nsapi.map.mapid.MIDHeader;
+import net.cg360.nsapi.map.mapid.format.MapID;
+import net.cg360.nsapi.map.mapid.format.MIDHeader;
 
 import java.util.Map;
 

@@ -1,4 +1,4 @@
-package net.cg360.nsapi.map.mapid;
+package net.cg360.nsapi.map.mapid.format;
 
 import com.google.gson.JsonObject;
 import net.cg360.nsapi.commons.Immutable;
@@ -6,6 +6,7 @@ import net.cg360.nsapi.commons.Utility;
 import net.cg360.nsapi.commons.data.MapRegionDataStore;
 import net.cg360.nsapi.commons.data.PointEntityDataStore;
 import net.cg360.nsapi.commons.math.PosRot;
+import net.cg360.nsapi.map.mapid.MapIDConstants;
 
 import java.util.*;
 

@@ -8,3 +8,8 @@ afterEvaluate {
         jar.archiveName('NSMapTools-Common-' + archiveVersion.get() + '.jar')
     }
 }
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}

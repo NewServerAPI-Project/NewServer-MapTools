@@ -1,11 +1,10 @@
-package net.cg360.nsapi.map.mapid;
+package net.cg360.nsapi.map.mapid.format;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import net.cg360.nsapi.commons.Check;
 import net.cg360.nsapi.commons.Utility;
-import net.cg360.nsapi.commons.exception.MissingPropertyException;
 
 import java.util.Optional;
 
@@ -28,7 +27,7 @@ public final class MIDHeader {
     }
 
     protected MIDHeader(String mapPath, String identifier, Integer formatVersion, String mapStorageType, String mapStorageVersion, Boolean hasCaseSensitiveIDs) {
-        Check.nullParam(formatVersion, "MapID", "format_version");
+        Check.nullParam(formatVersion, "format_version");
 
         this.mapPath = mapPath;
         this.identifier = identifier == null ? "generated-"+ Utility.generateUniqueToken(5, 3).toLowerCase() : identifier.trim().toLowerCase();

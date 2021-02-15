@@ -11,28 +11,33 @@ import java.util.List;
  * A class used to interface with a Cube16Chunk's block buffer without
  * the
  */
-public class Cube16BlockBuffer {
+public final class Cube16BlockBuffer {
 
     protected Cube16Chunk chunk;
     protected ByteBuffer blockBuffer;
 
-    protected byte lastBitIndex = 0;
+    protected int[] lastBlockPosition;
+    protected int lastPaletteBitDepth;
+    protected byte lastBitIndex;
 
     protected Cube16BlockBuffer(Cube16Chunk chunk, ByteBuffer sourceBuffer) {
         this.chunk = chunk;
-        sourceBuffer.duplicate();
+        this.blockBuffer = sourceBuffer.duplicate();
+
+        resetBlockBufferPosition();
     }
 
     /** Sets the position of the block buffer to 0 */
     public void resetBlockBufferPosition() {
         blockBuffer.clear();
+        lastBlockPosition = new int[]{0, 0, 0};
         lastBitIndex =  0;
     }
 
     /** Sets the position of the block buffer to the start of the block coords specified. */
     public void prepareBlockBufferPosition(int x, int y, int z) {
         blockBuffer.clear(); // Resets position to start. Doesn't actually clear.
-        short[] position = Cube16Utility.getBufferIndex(chunk.getPaletteBitDepth(), x, y, z);
+        short[] position = Cube16Utility.getBufferIndex(lastPaletteBitDepth, x, y, z);
         blockBuffer.position(position[0]);
         lastBitIndex = (byte) position[1]; // Its a byte unless something went wrong.
     }
@@ -57,7 +62,7 @@ public class Cube16BlockBuffer {
             blockBuffer.position(blockBuffer.position() - 1);
         }
 
-        byte requiredByteCount = (byte) Math.ceil( ((float) chunk.getPaletteBitDepth()) / 8 );
+        byte requiredByteCount = (byte) Math.ceil( ((float) lastPaletteBitDepth) / 8 );
         byte lastReadIndex = lastBitIndex;
 
         for(int i = 0; i < requiredByteCount; i++){
@@ -66,7 +71,7 @@ public class Cube16BlockBuffer {
             // Bit position is less than the distance to the next block
             // Bit position is less than 8 bits.
             // This works as long as depths are kept to 2^n. Else it starts missing bits.
-            for(byte b = lastReadIndex; (b < (lastReadIndex + chunk.getPaletteBitDepth())) && (b < 8); b++) {
+            for(byte b = lastReadIndex; (b < (lastReadIndex + lastPaletteBitDepth)) && (b < 8); b++) {
                 value += (NSMath.getBit(singleByte, b) * (2 ^ n));
                 n++;
                 lastBitIndex++; // Update the tracker.

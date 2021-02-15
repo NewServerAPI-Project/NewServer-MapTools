@@ -13,7 +13,7 @@ This library, written in **Java 8**, which holds a collection of tools used to r
 ### Format support list
 
 - [x] MapID 2 (json)
-- [x] NewServer Cube32 (nbt)
+- [ ] NewServer Cube16Chunk (nbt)
 - [ ] MC Schematic (nbt)
   - Supports all base features.
   - Partial MCEdit Unified support (Biomes)
@@ -101,6 +101,8 @@ _(Compared to the internal 1.1 format and codebase used at Mooncraft Games)_
 
 ## NS Cube16 (NBT)
 
+![Badge: Version](https://img.shields.io/badge/Version-1-blue?style=for-the-badge)
+
 ### Summary
 
 Cube16 is a chunk-based world storage format with parallels to Minecraft Java's own chunk format. It stores "chunks" in 16x16x16 cubes with methods to reduce file size applied across the format. Any metadata for worlds stored in this format should be stored in a companion **MapID** file.
@@ -157,3 +159,4 @@ Some notes about the format:
  - `encode_mode` can be different per-chunk. Applying to the `blocks` property, the types are:
    - 0: No added compression other than the use of the palette.
    - 1: run-length encoding is applied. (Group together runs of blocks)
+ - `blocks` - The bits dedicated to each block depends on the size of the palette. The format keeps the amount of bits required to store a block as low as possible (within 2^n) to support the size of the palette. (For example, a palette with 11 items would be supported with 4 bits)

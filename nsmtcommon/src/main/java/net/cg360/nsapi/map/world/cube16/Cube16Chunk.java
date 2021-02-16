@@ -16,8 +16,8 @@ import java.util.List;
  */
 public abstract class Cube16Chunk {
 
-    public static final int CHUNK_SIZE = 16; // This'll make scaling to 32x easier. May need to replace some datatypes.
-    public static final int BIOME_SCALE = 4; // The amount of blocks biome data covers. Vanilla is 4x4x4 as of 1.15
+    public static final short CHUNK_SIZE = 16; // This'll make scaling to 32x easier. May need to replace some datatypes.
+    public static final short BIOME_SCALE = 4; // The amount of blocks biome data covers. Vanilla is 4x4x4 as of 1.15
     public static final byte[] SUPPORTED_PALETTE_SCALES = { 1, 2, 4, 8, 16 };
 
     //TODO: Constructor + Builder.
@@ -29,7 +29,7 @@ public abstract class Cube16Chunk {
     protected List<Block> palette;
     protected List<CompoundTag> tileEntities;
     protected ByteBuffer blockData; // length = 16x16x16x(depth/8)
-    protected int paletteBitDepth; // Should recalculate blockData every time this changes.
+    protected byte paletteBitDepth; // Should recalculate blockData every time this changes.
 
     protected List<CompoundTag> chunkEntityData; // Only stores the last saved/loaded state the the chunks entities.
 
@@ -47,7 +47,8 @@ public abstract class Cube16Chunk {
      * @param z z coordinate of the block.
      * @return the block (ID + Blockstate)
      */
-    public Block getBlock(int x, int y, int z) {
+    public Block getBlock(byte x, byte y, byte z) {
+        //TODO: Add int method with checks + casts;
         getPrimaryBlockBuffer().prepareBlockBufferPosition(x, y, z);
         return getPrimaryBlockBuffer().getNextBlock();
     }
@@ -69,7 +70,7 @@ public abstract class Cube16Chunk {
 
     public Cube16Encode getEncodeMode() { return encodeMode; }
     public List<Block> getPalette() { return palette; }
-    public int getPaletteBitDepth() { return paletteBitDepth; }
+    public byte getPaletteBitDepth() { return paletteBitDepth; }
 
     public List<CompoundTag> getTileEntities() { return tileEntities; }
     public List<CompoundTag> getChunkEntityData() { return chunkEntityData; }

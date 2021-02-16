@@ -16,13 +16,16 @@ public final class Cube16BlockBuffer {
     protected Cube16Chunk chunk;
     protected ByteBuffer blockBuffer;
 
-    protected int[] lastBlockPosition;
-    protected int lastPaletteBitDepth;
+    protected byte lastPaletteBitDepth;
+
+    protected byte[] lastBlockPosition;
+    protected short lastBlockIndex;
     protected byte lastBitIndex;
 
     protected Cube16BlockBuffer(Cube16Chunk chunk, ByteBuffer sourceBuffer) {
         this.chunk = chunk;
         this.blockBuffer = sourceBuffer.duplicate();
+        this.lastPaletteBitDepth = chunk.getPaletteBitDepth();
 
         resetBlockBufferPosition();
     }
@@ -30,30 +33,45 @@ public final class Cube16BlockBuffer {
     /** Sets the position of the block buffer to 0 */
     public void resetBlockBufferPosition() {
         blockBuffer.clear();
-        lastBlockPosition = new int[]{0, 0, 0};
+        lastBlockPosition = new byte[]{0, 0, 0};
         lastBitIndex =  0;
+        lastBlockIndex = 0;
     }
 
     /** Sets the position of the block buffer to the start of the block coords specified. */
-    public void prepareBlockBufferPosition(int x, int y, int z) {
+    public void prepareBlockBufferPosition(byte x, byte y, byte z) {
         blockBuffer.clear(); // Resets position to start. Doesn't actually clear.
         short[] position = Cube16Utility.getBufferIndex(lastPaletteBitDepth, x, y, z);
         blockBuffer.position(position[0]);
         lastBitIndex = (byte) position[1]; // Its a byte unless something went wrong.
+        lastBlockIndex = (byte) position[2];
+        lastBlockPosition = new byte[]{ x, y, z };
     }
 
-    /** @return the next block available in the buffer. */
-    public Block getNextBlock() {
-        List<Block> palette = chunk.getPalette();
-        if(palette.size() == 1) { // Size should always be >1
-            return palette.get(0);
-        } else {
-            return palette.get(getNextBlockBufferValue());
-        }
+    /** Steps forward a number of blocks in the buffer. */
+    protected void forward(int steps) {
+        lastBlockIndex += steps;
+        byte[] newBlock = Cube16Utility.getBlockCoords(lastBlockIndex);
+        short[] newBufferPos = Cube16Utility.getBufferIndex(lastPaletteBitDepth, newBlock[0], newBlock[1], newBlock[2]);
+
+        lastBlockPosition = newBlock;
+        blockBuffer.position(newBufferPos[0]);
+        lastBitIndex = (byte) newBufferPos[1];
     }
 
-    /** The palette ID of the next block in the buffer. */
-    public int getNextBlockBufferValue() {
+    protected void updateBitDepth() {
+        // This should be called after the chunk's data has been recalculated.
+        prepareBlockBufferPosition(lastBlockPosition[0], lastBlockPosition[1], lastBlockPosition[2]);
+    }
+
+
+
+    /**
+     * A shortcut method that does not recalculate the block index or
+     * block position. Should only be used with bulk operations or internal
+     * methods followed by a call of the #forward().
+     */
+    protected int getNextUnsafeBlockBufferValue() {
         int value = 0;
         int n = 1;
 
@@ -84,6 +102,55 @@ public final class Cube16BlockBuffer {
 
         return value;
     }
+
+
+
+    /** @return the next block available in the buffer. */
+    public Block getNextBlock() {
+        List<Block> palette = chunk.getPalette();
+
+        if(palette.size() == 1) { // Size should always be >1
+            forward(1); //Skip forward one anyway.
+            return palette.get(0);
+        } else {
+            return palette.get(getNextBlockBufferValue());
+        }
+    }
+
+    /** The palette ID of the next block in the buffer. */
+    public int getNextBlockBufferValue() {
+        int val = getNextUnsafeBlockBufferValue();
+        forward(1);
+        return val;
+    }
+
+
+    /** @return the next N amount blocks available in the buffer. */
+    public Block[] getNextBlocks(int n) {
+        List<Block> palette = chunk.getPalette();
+        Block[] blocks = new Block[n];
+
+        if(palette.size() == 1) { // Size should always be >1
+            for (int i = 0; i < n; i++) blocks[i] = palette.get(0);
+            forward(n); //Skip to sync up all indexes
+
+        } else {
+            int[] paletteIDs = getNextBlockBufferValues(n);
+            for (int i = 0; i < n; i++) blocks[i] = palette.get(paletteIDs[i]);
+            // Does not need to forward()
+        }
+
+        return blocks;
+    }
+
+    /** The palette ID of the next block in the buffer. */
+    public int[] getNextBlockBufferValues(int n) {
+        int[] values = new int[n];
+        for (int i = 0; i < n; i++) values[i] = getNextUnsafeBlockBufferValue();
+        forward(n); //Catch up
+        return values;
+    }
+
 
     /** @return returns the chunk this buffer accesses. */
     public Cube16Chunk getChunk() {
